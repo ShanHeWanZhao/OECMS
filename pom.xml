@@ -12,7 +12,7 @@
     <name>OECMS</name>
     <description>毕业设计：光学实验课程管理系统</description>
 
-    <!--映入springboot的parent，管理springboot的版本为1.5.19-->
+    <!--引入springboot的parent，管理springboot的版本为1.5.19-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>

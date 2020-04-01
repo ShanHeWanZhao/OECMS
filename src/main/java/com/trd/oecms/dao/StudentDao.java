@@ -1,6 +1,6 @@
 package com.trd.oecms.dao;
 
-import com.trd.oecms.entity.Student;
+import com.trd.oecms.entities.Student;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.trd.oecms.web.controller;
 
 import com.trd.oecms.dao.StudentDao;
-import com.trd.oecms.entity.Student;
+import com.trd.oecms.entities.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

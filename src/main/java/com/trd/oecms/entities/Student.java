@@ -1,4 +1,4 @@
-package com.trd.oecms.entity;
+package com.trd.oecms.entities;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
