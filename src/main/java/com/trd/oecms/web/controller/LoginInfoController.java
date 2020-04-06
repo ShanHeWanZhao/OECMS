@@ -1,7 +1,10 @@
 package com.trd.oecms.web.controller;
 
+import com.trd.oecms.entities.LoginInfo;
+import com.trd.oecms.entities.enums.UserTypeEnum;
 import com.trd.oecms.service.ILoginInfoService;
 import com.trd.oecms.utils.JsonResult;
+import com.trd.oecms.utils.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +31,14 @@ public class LoginInfoController {
 		if (!StringUtils.hasText(username) || !StringUtils.hasText(password)){
 			return JsonResult.error("账号和密码都不能为空！");
 		}
-		return JsonResult.ok();
-//		try{
-//		    loginInfoService.getUser(username, password, type);
-//		}catch(Exception e){
-//
-//		}
+		try{
+			UserTypeEnum userType = UserTypeEnum.getByNumber(type);
+			LoginInfo info = loginInfoService.getUser(username, password, userType);
+			UserUtil.setCurrentLoginInfo(info);
+			return JsonResult.ok("success");
+		}catch(Exception e){
+			e.printStackTrace();
+			return JsonResult.error(e.getMessage());
+		}
 	}
 }
