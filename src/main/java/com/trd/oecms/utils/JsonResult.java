@@ -1,4 +1,4 @@
-package com.trd.oecms.entities;
+package com.trd.oecms.utils;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -15,8 +15,8 @@ import java.util.Collections;
 public class JsonResult {
     /**
      * 是否成功状态码：
-     *      1 —> 成功
-     *      0 —> 失败
+     *      0 —> 成功
+     *      1 —> 失败
      */
     private int code;
     private String msg;
@@ -25,7 +25,7 @@ public class JsonResult {
 
     public static JsonResult error(String msg){
         JsonResult result = new JsonResult();
-        result.code = 0;
+        result.code = 1;
         result.msg = msg;
         result.data = Collections.emptyMap();
         return result;
@@ -33,7 +33,7 @@ public class JsonResult {
 
     public static JsonResult ok(){
         JsonResult result = new JsonResult();
-        result.code = 1;
+        result.code = 0;
         result.msg = "success";
         result.data = Collections.emptyMap();
         return result;
@@ -41,7 +41,7 @@ public class JsonResult {
 
     public static JsonResult ok(Object data){
         JsonResult result = new JsonResult();
-        result.code = 1;
+        result.code = 0;
         result.msg = "success";
         result.data = data;
         return result;

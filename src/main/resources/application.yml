@@ -2,7 +2,7 @@
 server:
   port: 8888
 mybatis:
-  type-aliases-package: com.trd.oecms.entity
+  type-aliases-package: com.trd.oecms.entities
   mapper-locations:
     - mybatis/*.xml
 spring:

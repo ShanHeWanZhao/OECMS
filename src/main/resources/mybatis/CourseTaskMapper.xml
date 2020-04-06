@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trd.oecms.dao.CourseTaskMapper">
+  <resultMap id="BaseResultMap" type="com.trd.oecms.entities.CourseTask">
+    <!--
+     提示：这是mybatis逆向工程生成的xml文件
+     date：2020-04-05 17:42
+    -->
+    <id column="course_task_id" jdbcType="INTEGER" property="courseTaskId" />
+    <result column="exp_course_id" jdbcType="INTEGER" property="expCourseId" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="exp_course_report_path" jdbcType="VARCHAR" property="expCourseReportPath" />
+    <result column="exp_course_data_path" jdbcType="VARCHAR" property="expCourseDataPath" />
+    <result column="exp_course_grade" jdbcType="DECIMAL" property="expCourseGrade" />
+    <result column="course_task_status" jdbcType="TINYINT" property="courseTaskStatus" />
+    <result column="course_task_create_time" jdbcType="TIMESTAMP" property="courseTaskCreateTime" />
+    <result column="course_task_comment" jdbcType="VARCHAR" property="courseTaskComment" />
+  </resultMap>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="course_task_id">
+    insert into `course_task` (exp_course_id, student_id,
+      teacher_id, exp_course_report_path, exp_course_data_path, 
+      exp_course_grade, course_task_status, course_task_create_time, 
+      course_task_comment)
+    values (#{expCourseId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER},
+      #{teacherId,jdbcType=INTEGER}, #{expCourseReportPath,jdbcType=VARCHAR}, #{expCourseDataPath,jdbcType=VARCHAR}, 
+      #{expCourseGrade,jdbcType=DECIMAL}, #{courseTaskStatus,jdbcType=TINYINT}, #{courseTaskCreateTime,jdbcType=TIMESTAMP}, 
+      #{courseTaskComment,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey">
+    update `course_task`
+    set exp_course_id = #{expCourseId,jdbcType=INTEGER},
+      student_id = #{studentId,jdbcType=INTEGER},
+      teacher_id = #{teacherId,jdbcType=INTEGER},
+      exp_course_report_path = #{expCourseReportPath,jdbcType=VARCHAR},
+      exp_course_data_path = #{expCourseDataPath,jdbcType=VARCHAR},
+      exp_course_grade = #{expCourseGrade,jdbcType=DECIMAL},
+      course_task_status = #{courseTaskStatus,jdbcType=TINYINT},
+      course_task_create_time = #{courseTaskCreateTime,jdbcType=TIMESTAMP},
+      course_task_comment = #{courseTaskComment,jdbcType=VARCHAR}
+    where course_task_id = #{courseTaskId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select course_task_id, exp_course_id, student_id, teacher_id, exp_course_report_path, 
+    exp_course_data_path, exp_course_grade, course_task_status, course_task_create_time, 
+    course_task_comment
+    from `course_task`
+    where course_task_id = #{courseTaskId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select course_task_id, exp_course_id, student_id, teacher_id, exp_course_report_path, 
+    exp_course_data_path, exp_course_grade, course_task_status, course_task_create_time, 
+    course_task_comment
+    from `course_task`
+  </select>
+</mapper>

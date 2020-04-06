@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trd.oecms.dao.LoginInfoMapper">
+
+  <resultMap id="BaseResultMap" type="com.trd.oecms.entities.LoginInfo">
+    <!-- date： 2020-04-06 19:04 -->
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="account_number" jdbcType="VARCHAR" property="accountNumber" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_status" jdbcType="TINYINT" property="userStatus" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_type" jdbcType="TINYINT" property="userType" />
+  </resultMap>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="userId">
+    <!-- date： 2020-04-06 19:04 -->
+    insert into `login_info` (account_number, password,
+      create_time, user_status, user_name, user_type)
+    values (#{accountNumber,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{userStatus,jdbcType=TINYINT},
+      #{userName,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey">
+    <!-- date： 2020-04-06 19:04 -->
+    update `login_info`
+    set account_number = #{accountNumber,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      user_status = #{userStatus,jdbcType=TINYINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=TINYINT}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    <!-- date： 2020-04-06 19:04 -->
+    select user_id, account_number, password, create_time, user_status, user_name, user_type
+    from `login_info`
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    <!-- date： 2020-04-06 19:04 -->
+    select user_id, account_number, password, create_time, user_status, user_name, user_type
+    from `login_info`
+  </select>
+</mapper>

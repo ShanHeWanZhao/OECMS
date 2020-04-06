@@ -6,5 +6,16 @@ package com.trd.oecms.entities.enums;
  * @date 2020-04-01 17:16
  */
 public enum UserTypeEnum {
-    STUDENT,TEACHER,ADMIN
+	/**
+	 * 学生
+	 */
+    STUDENT,
+	/**
+	 * 教师
+	 */
+    TEACHER,
+	/**
+	 * 管理员
+	 */
+    ADMIN
 }

@@ -63,7 +63,7 @@
                 this.$http.post('/login', this.user)
                     .then((response) => {
                         // success callback
-                        if (response.data.code === 1){
+                        if (response.data.code === 0){
                             // 登陆成功，页面跳转
                             window.location = response.data.data;
                         }else{
