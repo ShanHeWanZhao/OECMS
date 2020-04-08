@@ -14,16 +14,14 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class IndexController {
 
+	/**
+	 * 登录页面定位索引
+	 * @return
+	 */
     @GetMapping("index")
     public String index(){
         return "login";
     }
-
-//    @GetMapping("errorPage")
-//    public String toErrorPage(Model model){
-//        model.addAttribute("loginInfo", UserUtil.getCurrentLoginInfo());
-//        return "errorPage";
-//    }
 
     /**
      * 登出系统

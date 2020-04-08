@@ -1,6 +1,6 @@
 # debug: true
 server:
-  port: 8888
+  port: 80
 mybatis:
   type-aliases-package: com.trd.oecms.entities
   mapper-locations:

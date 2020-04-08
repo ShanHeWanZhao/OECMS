@@ -1,6 +1,6 @@
 package com.trd.oecms.web.controller;
 
-import com.trd.oecms.annotation.RequireStudent;
+import com.trd.oecms.annotation.RequireAdmin;
 import com.trd.oecms.entities.LoginInfo;
 import com.trd.oecms.entities.enums.UserTypeEnum;
 import com.trd.oecms.service.ILoginInfoService;
@@ -55,8 +55,8 @@ public class LoginInfoController {
 	 * @param model
 	 * @return
 	 */
+	@RequireAdmin
 	@GetMapping("/success")
-	@RequireStudent
 	public String toSuccess(Model model){
 		UserUtil.addMenuInfo(model);
 		return "success";
