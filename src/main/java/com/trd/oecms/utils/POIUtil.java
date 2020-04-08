@@ -25,6 +25,10 @@ public class POIUtil {
 	private final static String XLS = "xls";
 	private final static String XLSX = "xlsx";
 	private final static Logger logger = LoggerFactory.getLogger(POIUtil.class);
+	private static POIUtil poiUtil = new POIUtil();
+
+	private POIUtil() {
+	}
 
 	/**
 	 * 读入excel文件，解析后返回
@@ -33,9 +37,9 @@ public class POIUtil {
 	 */
 	public static List<String[]> readExcel(MultipartFile file) throws IOException {
 		//检查文件
-		checkFile(file);
+		poiUtil.checkFile(file);
 		//获得Workbook工作薄对象
-		Workbook workbook = getWorkBook(file);
+		Workbook workbook = poiUtil.getWorkBook(file);
 		//创建返回对象，把每行中的值作为一个数组，所有行作为一个集合返回
 		List<String[]> list = new ArrayList<>();
 		if(workbook != null){
@@ -60,11 +64,11 @@ public class POIUtil {
 					int firstCellNum = row.getFirstCellNum();
 					//获得当前行的列数
 					int lastCellNum = row.getPhysicalNumberOfCells();
-					String[] cells = new String[row.getPhysicalNumberOfCells()];
+					String[] cells = new String[lastCellNum];
 					//循环当前行
 					for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
 						Cell cell = row.getCell(cellNum);
-						cells[cellNum] = getCellValue(cell);
+						cells[cellNum] = poiUtil.getCellValue(cell);
 					}
 					list.add(cells);
 				}
@@ -78,7 +82,7 @@ public class POIUtil {
 	 * @param file
 	 * @throws IOException
 	 */
-	private static void checkFile(MultipartFile file) throws IOException{
+	private  void checkFile(MultipartFile file) throws IOException{
 		//判断文件是否存在
 		if(null == file){
 			logger.error("文件不存在！");
@@ -98,7 +102,7 @@ public class POIUtil {
 	 * @param file
 	 * @return
 	 */
-	private static Workbook getWorkBook(MultipartFile file) {
+	private  Workbook getWorkBook(MultipartFile file) {
 		//获得文件名
 		String fileName = file.getOriginalFilename();
 		//创建Workbook工作薄对象，表示整个excel
@@ -125,7 +129,7 @@ public class POIUtil {
 	 * @param cell
 	 * @return
 	 */
-	private static String getCellValue(Cell cell){
+	private String getCellValue(Cell cell){
 		String cellValue = "";
 		if(cell == null){
 			return cellValue;

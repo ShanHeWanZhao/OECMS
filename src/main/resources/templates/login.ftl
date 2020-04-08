@@ -1,43 +1,53 @@
-<@override name="title">登录页面</@override>
-<@override name="data">
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title class="title">登录页面</title>
+    <link rel="stylesheet" href="/css/element-ui.css"/>
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="/js/vue.js"></script>
+    <script src="/js/element-ui.js"></script>
+    <script src="/js/vue-resource.js"></script>
+</head>
+<body style="margin: 0px;" class="login">
     <div id="vm">
-            <div class="login-wrap" >
-                <el-row type="flex" justify="center">
-                    <el-form ref="loginForm" :model="user" label-width="50px" label-position="left" @keyup.enter.native="doLogin">
-                        <h5>欢迎访问实验课程管理系统</h5>
-                        <el-form-item prop="username" label-width="80px" label="账 号" class="item">
-                            <el-input v-model="user.username" placeholder="请输入账号" style="width: 250px"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="password" label="密 码" label-width="80px" class="item">
-                            <el-input type="password" v-model="user.password" placeholder="请输入密码" style="width: 250px"></el-input>
-                        </el-form-item>
-                        <template>
-                            <el-radio-group v-model="user.type">
-                                <el-radio :label="0">学生</el-radio>
-                                <el-radio :label="1">教师</el-radio>
-                                <el-radio :label="2">管理员</el-radio>
-                            </el-radio-group>
-                        </template>
-                        <el-row :gutter="50">
-                            <el-col :span="8">
-                                <el-form-item>
-                                    <el-button type="primary" plain round icon="el-icon-upload2" @click="doLogin">登 录</el-button>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item>
-                                    <el-button type="primary" round plain icon="el-icon-refresh" @click="resetForm('loginForm')">重 置</el-button>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </el-form>
-                </el-row>
-            </div>
+        <div class="login-wrap" >
+            <el-row type="flex" justify="center">
+                <el-form ref="loginForm" :model="user" label-width="50px" label-position="left" @keyup.enter.native="doLogin">
+                    <h5>欢迎访问实验课程管理系统</h5>
+                    <el-form-item prop="accountNum" label-width="80px" label="账 号" class="item">
+                        <el-input v-model="user.accountNum" placeholder="请输入账号" style="width: 250px"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="password" label="密 码" label-width="80px" class="item">
+                        <el-input type="password" v-model="user.password" placeholder="请输入密码" style="width: 250px"></el-input>
+                    </el-form-item>
+                    <template>
+                        <el-radio-group v-model="user.type">
+                            <el-radio :label="0">学生</el-radio>
+                            <el-radio :label="1">教师</el-radio>
+                            <el-radio :label="2">管理员</el-radio>
+                        </el-radio-group>
+                    </template>
+                    <el-row :gutter="50">
+                        <el-col :span="8">
+                            <el-form-item>
+                                <el-button type="primary" plain round icon="el-icon-upload2" @click="doLogin">登 录</el-button>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item>
+                                <el-button type="primary" round plain icon="el-icon-refresh" @click="resetForm('loginForm')">重 置</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-row>
+        </div>
     </div>
-</@override>
-<@extends name="layout.ftl"/>
+</body>
+</html>
 <script>
-    $("#layout_body").addClass("login");
     Vue.http.options.emulateJSON = true;
     Vue.http.options.emulateHTTP = true;
     new Vue({
@@ -45,7 +55,7 @@
         data() {
             return {
                 user: {
-                    username: "",
+                    accountNum: "",
                     password: "",
                     type: 0
                 }
@@ -53,7 +63,7 @@
         },
         methods: {
             doLogin() {
-                if (!this.user.username) {
+                if (!this.user.accountNum) {
                     this.$message.error("请输入账号！");
                     return;
                 } else if (!this.user.password) {

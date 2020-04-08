@@ -50,4 +50,15 @@ public class LoginInfo implements Serializable {
     private Byte userType;
 
     private static final long serialVersionUID = 1L;
+
+    public LoginInfo() {
+    }
+
+    public LoginInfo(String userName, String accountNumber, String password, Date createTime, Byte userStatus) {
+        this.accountNumber = accountNumber;
+        this.password = password;
+        this.createTime = createTime;
+        this.userStatus = userStatus;
+        this.userName = userName;
+    }
 }

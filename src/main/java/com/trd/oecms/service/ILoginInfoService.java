@@ -21,11 +21,11 @@ public interface ILoginInfoService {
 	int updateByUserId(LoginInfo record);
 
 	/**
-	 * 获取Logininfo对象
-	 * @param username 用户名
+	 * 获取LoginInfo对象
+	 * @param accountNum 用户名
 	 * @param password 密码
 	 * @param userType 用户类型
 	 * @return
 	 */
-	LoginInfo getUser(String username, String password, UserTypeEnum userType) throws UserNotExistExcepion;
+	LoginInfo getUser(String accountNum, String password, UserTypeEnum userType) throws UserNotExistExcepion;
 }

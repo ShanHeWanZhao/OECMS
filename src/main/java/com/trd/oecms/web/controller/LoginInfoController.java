@@ -1,5 +1,6 @@
 package com.trd.oecms.web.controller;
 
+import com.trd.oecms.annotation.RequireStudent;
 import com.trd.oecms.entities.LoginInfo;
 import com.trd.oecms.entities.enums.UserTypeEnum;
 import com.trd.oecms.service.ILoginInfoService;
@@ -9,7 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,23 +24,42 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/loginInfo")
 public class LoginInfoController {
 	private final Logger logger = LoggerFactory.getLogger(LoginInfoController.class);
+
 	@Autowired
 	private ILoginInfoService loginInfoService;
 
+	/**
+	 * 用户登录
+	 * @param accountNum 账号
+	 * @param password 密码
+	 * @param type 类型
+	 * @return
+	 */
 	@PostMapping("/login")
 	@ResponseBody
-	public JsonResult login(String username, String password, Integer type) {
-		if (!StringUtils.hasText(username) || !StringUtils.hasText(password)){
-			return JsonResult.error("账号和密码都不能为空！");
-		}
+	public JsonResult login(String accountNum, String password, Byte type) {
 		try{
 			UserTypeEnum userType = UserTypeEnum.getByNumber(type);
-			LoginInfo info = loginInfoService.getUser(username, password, userType);
+			LoginInfo info = loginInfoService.getUser(accountNum, password, userType);
+			// 将当前用户信息保存到session中
 			UserUtil.setCurrentLoginInfo(info);
-			return JsonResult.ok("success");
+			logger.info("登录成功，登录账号：{}，登陆者：{}",info.getAccountNumber(), info.getUserName());
+			return JsonResult.ok("/loginInfo/success");
 		}catch(Exception e){
-			e.printStackTrace();
 			return JsonResult.error(e.getMessage());
 		}
 	}
+
+	/**
+	 * 登陆成功，页面跳转
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/success")
+	@RequireStudent
+	public String toSuccess(Model model){
+		UserUtil.addMenuInfo(model);
+		return "success";
+	}
 }
+

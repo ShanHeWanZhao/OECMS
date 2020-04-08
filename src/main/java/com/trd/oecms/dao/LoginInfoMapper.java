@@ -18,7 +18,7 @@ public interface LoginInfoMapper {
 
     int updateByPrimaryKey(LoginInfo record);
 
-	LoginInfo getByLoginPage(@Param("username") String username,
+	LoginInfo getByLoginPage(@Param("accountNum") String accountNum,
 							 @Param("password") String password,
 							 @Param("userType") int ordinal);
 }

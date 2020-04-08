@@ -46,10 +46,10 @@
         <include refid="allSelectSql"/>
         from `login_info`
     </select>
-    <select id="getByLoginPage" resultType="com.trd.oecms.entities.LoginInfo">
+    <select id="getByLoginPage" resultMap="BaseResultMap">
         <include refid="allSelectSql"/>
         from login_info
-        where account_number = #{username}
+        where account_number = #{accountNum}
         and password = #{password}
         and user_type = #{userType}
     </select>

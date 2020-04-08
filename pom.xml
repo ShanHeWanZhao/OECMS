@@ -43,6 +43,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--aop启动器-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
         <!--使用undertow作为web容器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

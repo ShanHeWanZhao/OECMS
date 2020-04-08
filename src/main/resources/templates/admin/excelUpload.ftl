@@ -2,25 +2,23 @@
 <@override name="data">
 <div id="vm">
     <el-upload
-            class="upload-demo"
             action="/excel/upload"
             multiple
             drag
             :limit="5"
             :before-upload="beforeUpload"
-            :on-exceed="handleExceed"
-            :file-list="fileList">
+            :on-exceed="handleExceed">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <div class="el-upload__tip" slot="tip">只能上传xls或xlsx文件</div>
     </el-upload>
 </div>
 </@override>
-<@extends name="layout.ftl"/>
+<@extends name="../layout.ftl"/>
 <script>
     Vue.http.options.emulateJSON = true;
     Vue.http.options.emulateHTTP = true;
-    new Vue({
+    const vm = new Vue({
         el: '#vm',
         data() {
             return {

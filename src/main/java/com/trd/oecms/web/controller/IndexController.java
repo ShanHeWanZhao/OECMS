@@ -1,11 +1,11 @@
 package com.trd.oecms.web.controller;
 
-import com.trd.oecms.utils.JsonResult;
+import com.trd.oecms.utils.UserUtil;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author tanruidong
@@ -19,8 +19,20 @@ public class IndexController {
         return "login";
     }
 
-    @GetMapping("success")
-    public String success() {
-        return "success";
+//    @GetMapping("errorPage")
+//    public String toErrorPage(Model model){
+//        model.addAttribute("loginInfo", UserUtil.getCurrentLoginInfo());
+//        return "errorPage";
+//    }
+
+    /**
+     * 登出系统
+     * @return
+     */
+    @GetMapping("logout")
+    public String logout(){
+        HttpSession session = UserUtil.getSession();
+        session.invalidate();
+        return "redirect:/index";
     }
 }
