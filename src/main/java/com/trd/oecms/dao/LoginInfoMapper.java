@@ -21,4 +21,6 @@ public interface LoginInfoMapper {
 	LoginInfo getByLoginPage(@Param("accountNum") String accountNum,
 							 @Param("password") String password,
 							 @Param("userType") int ordinal);
+
+    void updatePassword(@Param("id") Integer userId,@Param("password") String newPassword);
 }

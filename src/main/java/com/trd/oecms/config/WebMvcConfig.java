@@ -18,13 +18,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	 * 添加拦截器
 	 * @param registry
 	 */
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new UserInterceptor()).
-				addPathPatterns("/**").
-				excludePathPatterns("/loginInfo/login").
-				excludePathPatterns("/index");
-	}
+//	@Override
+//	public void addInterceptors(InterceptorRegistry registry) {
+//		registry.addInterceptor(new UserInterceptor()).
+//				addPathPatterns("/**").
+//				excludePathPatterns("/loginInfo/login").
+//				excludePathPatterns("/index");
+//	}
 
 	/**
 	 * 静态资源映射

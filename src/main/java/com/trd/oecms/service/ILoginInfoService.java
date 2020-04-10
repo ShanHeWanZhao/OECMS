@@ -2,7 +2,7 @@ package com.trd.oecms.service;
 
 import com.trd.oecms.entities.LoginInfo;
 import com.trd.oecms.entities.enums.UserTypeEnum;
-import com.trd.oecms.exception.UserNotExistExcepion;
+import com.trd.oecms.exception.UserNotExistException;
 
 import java.util.List;
 
@@ -27,5 +27,12 @@ public interface ILoginInfoService {
 	 * @param userType 用户类型
 	 * @return
 	 */
-	LoginInfo getUser(String accountNum, String password, UserTypeEnum userType) throws UserNotExistExcepion;
+	LoginInfo getUser(String accountNum, String password, UserTypeEnum userType) throws UserNotExistException;
+
+	/**
+	 * 根据用户id修改密码
+	 * @param userId
+	 * @param newPassword
+	 */
+    void updatePassword(Integer userId, String newPassword);
 }

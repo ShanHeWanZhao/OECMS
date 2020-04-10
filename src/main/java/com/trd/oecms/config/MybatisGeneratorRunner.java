@@ -17,12 +17,11 @@ public class MybatisGeneratorRunner {
 	public static void main(String[] args) {
 		try {
 			List<String> warnings = new ArrayList<>();
-			boolean overwrite = true;
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 			InputStream is = classloader.getResourceAsStream("generatorConfig.xml");
 			ConfigurationParser cp = new ConfigurationParser(warnings);
 			Configuration config = cp.parseConfiguration(is);
-			DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+			DefaultShellCallback callback = new DefaultShellCallback(true);
 			MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
 			myBatisGenerator.generate(null);
 		} catch (Exception e) {

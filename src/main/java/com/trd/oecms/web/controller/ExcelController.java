@@ -6,8 +6,7 @@ import com.trd.oecms.entities.enums.UserTypeEnum;
 import com.trd.oecms.utils.JsonResult;
 import com.trd.oecms.utils.POIUtil;
 import com.trd.oecms.utils.UserUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +24,8 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("excel")
+@Slf4j
 public class ExcelController {
-
-	private Logger logger = LoggerFactory.getLogger(ExcelController.class);
 
 	@RequireAdmin
 	@RequestMapping("upload")
@@ -38,10 +36,10 @@ public class ExcelController {
 			loginInfoList.forEach(System.out::println);
 			return JsonResult.ok(loginInfoList);
 		} catch (IOException e) {
-			logger.error("读取Excel失败，原因：{}",e.getMessage(),e);
+			log.error("读取Excel失败，原因：{}",e.getMessage(),e);
 			return JsonResult.error(e.getMessage());
 		} catch (IllegalArgumentException e1){
-			logger.error("参数给定错误，原因：{}", e1.getMessage());
+			log.error("参数给定错误，原因：{}", e1.getMessage());
 			return JsonResult.error(e1.getMessage());
 		}
 	}

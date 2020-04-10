@@ -12,12 +12,7 @@
     <div class="error-container">
         <img src="../static/img/accessDeny.png" alt="别看，小伙子"/>
         <div class="font_container">
-            <#if loginInfo??>
-                ${loginInfo.getUserName()},
-            </#if>
-            <#if msg??>
-                ${msg}
-            </#if>
+                ${userName!'你怎么没名字？？'}，${msg!'也没有错误提示！！'}
         </div>
     </div>
     </body>

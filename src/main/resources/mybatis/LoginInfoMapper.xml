@@ -35,6 +35,11 @@
         user_type = #{userType,jdbcType=TINYINT}
         where user_id = #{userId,jdbcType=INTEGER}
     </update>
+    <update id="updatePassword">
+        update `login_info`
+        set password = #{password,jdbcType=VARCHAR}
+        where user_id = #{id,jdbcType=INTEGER}
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         <!-- date： 2020-04-06 19:04 -->
         select user_id, account_number, password, create_time, user_status, user_name, user_type

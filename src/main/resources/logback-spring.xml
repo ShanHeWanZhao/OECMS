@@ -29,9 +29,11 @@
     </appender>
     <!--ThresholdFilter过滤WARN等级日志-->
     <appender name="warnLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--如果只是想要 WARN 级别的日志，那么需要过滤一下，默认是 info 级别的，ThresholdFilter-->
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+        <!--等级过滤-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${logback.logDir}/warn.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -44,6 +46,7 @@
     </appender>
     <!--ThresholdFilter过滤ERROR等级日志-->
     <appender name="errorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--低于阈值以下的就过滤掉-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
