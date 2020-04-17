@@ -27,7 +27,6 @@ public class JsonResult {
         JsonResult result = new JsonResult();
         result.code = 1;
         result.msg = msg;
-        result.data = Collections.emptyMap();
         return result;
     }
 
@@ -35,7 +34,6 @@ public class JsonResult {
         JsonResult result = new JsonResult();
         result.code = 0;
         result.msg = "success";
-        result.data = Collections.emptyMap();
         return result;
     }
 

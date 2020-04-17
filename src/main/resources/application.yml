@@ -18,6 +18,23 @@ spring:
     max-active: 20
     # 配置获取连接等待超时的时间
     max-wait: 60000
+  http:
+    multipart:
+      max-file-size: 5MB
+  jackson:  # 格式化日期
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 logging:
   level:
     com.trd.oecms.dao: debug # 打开日志，查看sql语句
+jodconverter:
+  local:
+    enabled: true
+    max-tasks-per-process: 20
+    port-numbers: 8888
+experimentalCourse:
+  resources:
+    word:
+      materials: ${user.dir}/expResources/word/materials/ # 实验课程讲义存放路径
+      result_data: ${user.dir}/expResources/word/result_data/ # 实验课程结果数据存放路径
+

@@ -2,7 +2,7 @@
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <property name="logback.logDir" value="${user.home}/logs/OECMS"/>
+    <property name="logback.logDir" value="${user.home}/oecms/logs"/>
 
     <!--levelFilter过滤info等级日志-->
     <appender name="infoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">

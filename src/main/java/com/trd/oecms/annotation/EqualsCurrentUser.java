@@ -1,6 +1,6 @@
 package com.trd.oecms.annotation;
 
-import com.trd.oecms.entities.enums.UserInfoType;
+import com.trd.oecms.constants.enums.LoginInfoTypeEnum;
 
 import javax.validation.Constraint;
 import com.trd.oecms.validator.EqualsCurrentUserValidator;
@@ -27,7 +27,7 @@ public @interface EqualsCurrentUser {
      * 检测当前用户的某项信息
      * @return
      */
-    UserInfoType infoType() default UserInfoType.ID;
+    LoginInfoTypeEnum infoType() default LoginInfoTypeEnum.ID;
 
     /**
      * 是否要求密码相同

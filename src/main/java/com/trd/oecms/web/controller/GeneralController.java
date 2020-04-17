@@ -1,7 +1,8 @@
 package com.trd.oecms.web.controller;
 
 import com.trd.oecms.annotation.EqualsCurrentUser;
-import com.trd.oecms.entities.enums.UserInfoType;
+import com.trd.oecms.constants.enums.LoginInfoTypeEnum;
+import com.trd.oecms.model.LoginInfo;
 import com.trd.oecms.service.ILoginInfoService;
 import com.trd.oecms.utils.JsonResult;
 import com.trd.oecms.utils.UserUtil;
@@ -59,16 +60,18 @@ public class GeneralController {
     @ResponseBody
     public JsonResult updatePassword(@EqualsCurrentUser
                                      Integer userId,
-                                     @EqualsCurrentUser(infoType = UserInfoType.PASSWORD, message = "{user.oldPassword}")
+                                     @EqualsCurrentUser(infoType = LoginInfoTypeEnum.PASSWORD, message = "{user.oldPassword}")
                                      String oldPassword,
                                      @Size(min = 8, max = 30, message = "{newPassword.size}")
                                      @Pattern(regexp = "^[A-Za-z0-9]+$", message = "{newPassword.format.notMatch}")
-                                     @EqualsCurrentUser(infoType = UserInfoType.PASSWORD,
+                                     @EqualsCurrentUser(infoType = LoginInfoTypeEnum.PASSWORD,
                                                          requireSamePassword = false,
                                                          message = "{require.newPassword.notEquals.oldPassword}")
                                      String newPassword){
         try{
-            loginInfoService.updatePassword(userId, newPassword);
+            LoginInfo loginInfo = new LoginInfo();
+            loginInfo.setUserId(userId).setPassword(newPassword);
+            loginInfoService.updateSelectiveById(loginInfo);
             return JsonResult.ok("/logout");
         }catch(Exception e){
             log.error("用户id为【{}】的密码修改失败", userId, e);

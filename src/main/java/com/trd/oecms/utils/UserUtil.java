@@ -1,6 +1,6 @@
 package com.trd.oecms.utils;
 
-import com.trd.oecms.entities.LoginInfo;
+import com.trd.oecms.model.LoginInfo;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * @author Trd
- * @date 2019-12-08 23:42
+ * @date 2020-4-6 10:42
  */
 public class UserUtil {
 
@@ -51,7 +51,7 @@ public class UserUtil {
 	 * 向model中保存LoginInfo数据
 	 * @param model
 	 */
-	public static void addMenuInfo(Model model){
+	public static void addLoginInfo(Model model){
 		model.addAttribute("loginInfo", getCurrentLoginInfo());
 	}
 

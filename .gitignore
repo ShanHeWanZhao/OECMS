@@ -30,3 +30,5 @@ target/
 *.iws
 *.iml
 *.ipr
+
+expResources/

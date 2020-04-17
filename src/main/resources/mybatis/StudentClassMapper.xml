@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trd.oecms.dao.StudentClassMapper">
+    <resultMap id="BaseResultMap" type="com.trd.oecms.model.StudentClass">
+        <!-- date： 2020-04-14 10:25 -->
+        <id column="student_class_id" jdbcType="INTEGER" property="studentClassId"/>
+        <result column="class_name" jdbcType="VARCHAR" property="className"/>
+        <result column="class_status" jdbcType="TINYINT" property="classStatus"/>
+        <result column="class_create_time" jdbcType="TIMESTAMP" property="classCreateTime"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="studentClassId" keyColumn="student_class_id">
+        <!-- date： 2020-04-14 10:25 -->
+        insert into `student_class` (class_name, class_status,class_create_time)
+        values (#{className,jdbcType=VARCHAR}, #{classStatus,jdbcType=TINYINT},#{classCreateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="updateByPrimaryKey">
+        <!-- date： 2020-04-14 10:25 -->
+        update `student_class`
+        set class_name = #{className,jdbcType=VARCHAR},
+        class_status = #{classStatus,jdbcType=TINYINT},
+        class_create_time = #{classCreateTime,jdbcType=TIMESTAMP}
+        where student_class_id = #{studentClassId,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        <!-- date： 2020-04-14 10:25 -->
+        select student_class_id, class_name, class_status, class_create_time
+        from `student_class`
+        where student_class_id = #{studentClassId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <!-- date： 2020-04-14 10:25 -->
+        select student_class_id, class_name, class_status, class_create_time
+        from `student_class`
+    </select>
+
+    <select id="getIdByClassName" resultType="java.lang.Integer">
+        SELECT student_class_id FROM student_class WHERE class_name = #{className}
+    </select>
+</mapper>

@@ -32,21 +32,18 @@
             <el-menu-item index="/expCourse">上实验课</el-menu-item>
         </#if>
         <#if loginInfo.userType == 1>
-            <el-submenu index="/class">
-                <template slot="title">课堂</template>
-                <el-menu-item index="/teach">讲课</el-menu-item>
-                <el-menu-item index="/assignHomework">布置作业</el-menu-item>
-            </el-submenu>
-            <el-menu-item index="/handleHomework">处理作业</el-menu-item>
-            <el-menu-item index="/seeExpCourse">查看实验课</el-menu-item>
+<#--            <el-submenu index="/class">-->
+<#--                <template slot="title">课堂</template>-->
+<#--                <el-menu-item index="/teach">讲课</el-menu-item>-->
+<#--                <el-menu-item index="/assignHomework">布置作业</el-menu-item>-->
+<#--            </el-submenu>-->
+            <el-menu-item index="/teacher/handleCourseTask">查看学生完成情况</el-menu-item>
+            <el-menu-item index="/teacher/getMyExpCourse">查看实验课</el-menu-item>
         </#if>
         <#if loginInfo.userType == 2>
-            <el-submenu index="/manage">
-                <template slot="title">管理大家</template>
-                <el-menu-item index="/checkUser">查看用户</el-menu-item>
-            </el-submenu>
-            <el-menu-item index="/excel/index">发布账号</el-menu-item>
-            <el-menu-item index="/uploadCourse">上传课程</el-menu-item>
+            <el-menu-item index="/admin/getAllExcludeAdmin">查看用户</el-menu-item>
+            <el-menu-item index="/excel/prepareUploadLoginInfo">发布账号</el-menu-item>
+            <el-menu-item index="/excel/prepareUploadExpCourse">上传课程</el-menu-item>
         </#if>
         <el-submenu index="logout" style="float:right;margin-right:1%">
             <template slot="title"><#if loginInfo??>${loginInfo.userName}</#if></template>

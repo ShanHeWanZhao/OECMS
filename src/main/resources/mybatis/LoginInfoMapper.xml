@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.trd.oecms.dao.LoginInfoMapper">
 
-    <resultMap id="BaseResultMap" type="com.trd.oecms.entities.LoginInfo">
+    <resultMap id="BaseResultMap" type="com.trd.oecms.model.LoginInfo">
         <!-- date： 2020-04-06 19:04 -->
         <id column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="account_number" jdbcType="VARCHAR" property="accountNumber"/>
@@ -11,38 +11,73 @@
         <result column="user_status" jdbcType="TINYINT" property="userStatus"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="user_type" jdbcType="TINYINT" property="userType"/>
+        <result column="user_class_id" jdbcType="INTEGER" property="userClassId"/>
     </resultMap>
-
+    <!--分页查询的映射-->
+    <resultMap id="paginationResultMap" type="com.trd.oecms.model.LoginInfo" extends="BaseResultMap">
+        <result column="user_class_name" jdbcType="VARCHAR" property="className"/>
+    </resultMap>
+    <!--LoginInfo表全部字段的查询-->
     <sql id="allSelectSql">
-        select user_id, account_number, password, create_time, user_status, user_name, user_type
+        select user_id,
+               account_number,
+               password,
+               create_time,
+               user_status,
+               user_name,
+               user_type,
+               user_class_id
+    </sql>
+    <sql id="allInsertSql">
+        insert into `login_info` (account_number, password, create_time, user_status, user_name, user_type,
+                                  user_class_id)
     </sql>
     <insert id="insert" useGeneratedKeys="true" keyProperty="userId">
         <!-- date： 2020-04-06 19:04 -->
-        insert into `login_info` (account_number, password,
-        create_time, user_status, user_name, user_type)
+        <include refid="allInsertSql"/>
         values (#{accountNumber,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
         #{createTime,jdbcType=TIMESTAMP}, #{userStatus,jdbcType=TINYINT},
-        #{userName,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT})
+        #{userName,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT},#{userClassId,jdbcType=INTEGER})
     </insert>
-    <update id="updateByPrimaryKey">
+    <!--管理员批量插入登录信息-->
+    <insert id="insertBatch">
+        <include refid="allInsertSql"/>
+        <trim suffixOverrides=",">
+            <foreach collection="loginInfoList" item="loginInfo" open="values ">
+                (#{loginInfo.accountNumber}, #{loginInfo.password},
+                #{loginInfo.createTime}, #{loginInfo.userStatus},
+                #{loginInfo.userName}, #{loginInfo.userType}, #{loginInfo.userClassId}),
+            </foreach>
+        </trim>
+    </insert>
+    <update id="updateSelectiveById">
         <!-- date： 2020-04-06 19:04 -->
         update `login_info`
-        set account_number = #{accountNumber,jdbcType=VARCHAR},
-        password = #{password,jdbcType=VARCHAR},
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-        user_status = #{userStatus,jdbcType=TINYINT},
-        user_name = #{userName,jdbcType=VARCHAR},
-        user_type = #{userType,jdbcType=TINYINT}
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="accountNumber != null and accountNumber != '' ">
+                account_number = #{accountNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password != '' ">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="userStatus != null">
+                user_status = #{userStatus,jdbcType=TINYINT},
+            </if>
+            <if test="userName != null and userName != '' ">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                user_type = #{userType,jdbcType=TINYINT}
+            </if>
+            <if test="userClassId != null">
+                user_class_id = #{userClassId,jdbcType=INTEGER}
+            </if>
+        </trim>
         where user_id = #{userId,jdbcType=INTEGER}
-    </update>
-    <update id="updatePassword">
-        update `login_info`
-        set password = #{password,jdbcType=VARCHAR}
-        where user_id = #{id,jdbcType=INTEGER}
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         <!-- date： 2020-04-06 19:04 -->
-        select user_id, account_number, password, create_time, user_status, user_name, user_type
+        <include refid="allSelectSql"/>
         from `login_info`
         where user_id = #{userId,jdbcType=INTEGER}
     </select>
@@ -57,5 +92,46 @@
         where account_number = #{accountNum}
         and password = #{password}
         and user_type = #{userType}
+    </select>
+    <select id="getIdByTeacherName" resultMap="BaseResultMap">
+        <include refid="allSelectSql"/>
+        from login_info
+        where user_name = #{teacherName}
+        and user_type = 1
+    </select>
+    <!--管理员分页查询（可按条件）登录信息-->
+    <sql id="list">
+        from login_info l
+        left join student_class s
+        on l.user_class_id=s.student_class_id
+        <where>
+            <if test="info.accountNumber != null">
+                l.account_number LIKE '%${info.accountNumber}%'
+            </if>
+            <if test="info.userStatus != null">
+                and l.user_status = #{info.userStatus}
+            </if>
+            <if test="info.userName != null and info.userName != '' ">
+                and l.user_name LIKE '%${info.userName}%'
+            </if>
+            <if test="info.userType != null">
+                and l.user_type = #{info.userType}
+            </if>
+                and l.user_type IN (0,1)
+        </where>
+    </sql>
+    <select id="listExcludeAdmin" resultMap="paginationResultMap">
+        select l.user_id, l.account_number, l.create_time, l.user_status, l.user_type, l.user_name, l.user_class_id,
+        s.class_name AS user_class_name
+        <include refid="list"/>
+        ORDER BY l.user_id
+        limit #{offset}, #{size}
+    </select>
+    <select id="listExcludeAdminCount" resultType="int">
+        select count(l.user_id)
+        <include refid="list"/>
+    </select>
+    <select id="getStudentIdByClassId" resultType="java.lang.Integer">
+        SELECT user_id FROM login_info where user_class_id = #{classId}
     </select>
 </mapper>

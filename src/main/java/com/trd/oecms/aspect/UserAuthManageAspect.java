@@ -1,7 +1,7 @@
 package com.trd.oecms.aspect;
 
-import com.trd.oecms.entities.LoginInfo;
-import com.trd.oecms.entities.enums.UserTypeEnum;
+import com.trd.oecms.model.LoginInfo;
+import com.trd.oecms.constants.enums.UserTypeEnum;
 import com.trd.oecms.exception.AuthNotPassException;
 import com.trd.oecms.utils.UserUtil;
 import org.aspectj.lang.ProceedingJoinPoint;

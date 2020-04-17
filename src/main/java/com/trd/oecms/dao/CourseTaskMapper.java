@@ -1,21 +1,20 @@
 package com.trd.oecms.dao;
 
-import com.trd.oecms.entities.CourseTask;
-import org.apache.ibatis.annotations.Param;
-
+import com.trd.oecms.model.CourseTask;
 import java.util.List;
 
 /**
  * @author Trd
- * @date 2020-04-05 17:42
+ * @date 2020-04-14 10:25
  */
 public interface CourseTaskMapper {
-
     int insert(CourseTask record);
 
-    CourseTask selectByPrimaryKey(@Param("courseTaskId") Integer courseTaskId);
+    CourseTask selectByPrimaryKey(Integer courseTaskId);
 
     List<CourseTask> selectAll();
 
     int updateByPrimaryKey(CourseTask record);
+
+    int insertBatch(List<CourseTask> courseTaskList);
 }

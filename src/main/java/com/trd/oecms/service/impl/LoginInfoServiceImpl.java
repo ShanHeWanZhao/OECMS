@@ -1,13 +1,16 @@
 package com.trd.oecms.service.impl;
 
+import com.trd.oecms.constants.enums.UserTypeEnum;
 import com.trd.oecms.dao.LoginInfoMapper;
-import com.trd.oecms.entities.LoginInfo;
-import com.trd.oecms.entities.enums.UserTypeEnum;
 import com.trd.oecms.exception.UserNotExistException;
+import com.trd.oecms.model.BaseClassName;
+import com.trd.oecms.model.LoginInfo;
 import com.trd.oecms.service.ILoginInfoService;
+import com.trd.oecms.utils.JsonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -38,7 +41,7 @@ public class LoginInfoServiceImpl implements ILoginInfoService {
 
 	@Override
 	public int updateByUserId(LoginInfo record) {
-		return loginInfoMapper.updateByPrimaryKey(record);
+		return loginInfoMapper.updateSelectiveById(record);
 	}
 
 	@Override
@@ -56,7 +59,45 @@ public class LoginInfoServiceImpl implements ILoginInfoService {
 	}
 
     @Override
-    public void updatePassword(Integer userId, String newPassword) {
-        loginInfoMapper.updatePassword(userId, newPassword);
+    public void updateSelectiveById(LoginInfo loginInfo) {
+        loginInfoMapper.updateSelectiveById(loginInfo);
     }
+
+    @Override
+    public int insertBatch(List<LoginInfo> loginInfoList) {
+        return loginInfoMapper.insertBatch(loginInfoList);
+    }
+
+    @Override
+    public Integer getIdByTeacherName(String teacherName) {
+		LoginInfo teacherInfo = loginInfoMapper.getIdByTeacherName(teacherName);
+		Assert.notNull(teacherInfo, "名为【"+teacherName+"】的教师不存在，请仔细检查");
+		System.out.println(teacherInfo);
+		if (teacherInfo.getUserStatus() == 1){
+			throw new IllegalArgumentException(teacherInfo.getUserName()+"，该老师状态异常，请联系管理员");
+		}
+		return teacherInfo.getUserId();
+	}
+
+    @Override
+    public JsonResult listExcludeAdmin(int offset, Integer pageSize, LoginInfo loginInfo) {
+		try{
+			List<LoginInfo> infoList = loginInfoMapper.listExcludeAdmin(offset, pageSize, loginInfo);
+			int count = loginInfoMapper.listExcludeAdminCount(offset, pageSize, loginInfo);
+			JsonResult jsonResult = JsonResult.ok();
+			if (infoList != null && infoList.size() > 0){
+				jsonResult.setData(infoList);
+				jsonResult.setCount(count);
+			}
+			return jsonResult;
+		}catch(Exception e){
+			e.printStackTrace();
+			return JsonResult.error(e.getMessage());
+		}
+    }
+
+	@Override
+	public List<Integer> getStudentIdByClassId(Integer studentClassId) {
+		return loginInfoMapper.getStudentIdByClassId(studentClassId);
+	}
 }

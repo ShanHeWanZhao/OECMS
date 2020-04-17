@@ -1,8 +1,9 @@
 package com.trd.oecms.service;
 
-import com.trd.oecms.entities.LoginInfo;
-import com.trd.oecms.entities.enums.UserTypeEnum;
+import com.trd.oecms.model.LoginInfo;
+import com.trd.oecms.constants.enums.UserTypeEnum;
 import com.trd.oecms.exception.UserNotExistException;
+import com.trd.oecms.utils.JsonResult;
 
 import java.util.List;
 
@@ -30,9 +31,33 @@ public interface ILoginInfoService {
 	LoginInfo getUser(String accountNum, String password, UserTypeEnum userType) throws UserNotExistException;
 
 	/**
-	 * 根据用户id修改密码
-	 * @param userId
-	 * @param newPassword
+	 * 选择性的更新用户信息
+	 * @param loginInfo
 	 */
-    void updatePassword(Integer userId, String newPassword);
+    void updateSelectiveById(LoginInfo loginInfo);
+
+	/**
+	 * 批量插入登录信息
+	 * @param loginInfoList
+	 * @return 插入成功的数量
+	 */
+	int insertBatch(List<LoginInfo> loginInfoList);
+
+	/**
+	 * 通过教师名字查询其id
+	 * @param teacherName
+	 * @return
+	 */
+    Integer getIdByTeacherName(String teacherName);
+
+	/**
+	 * 分页查询除管理员之外的所有用户（可包括条件查询）
+	 * @param offset 起始行
+	 * @param pageSize 查询的数量
+	 * @param loginInfo 条件查询信息
+	 * @return
+	 */
+    JsonResult listExcludeAdmin(int offset, Integer pageSize, LoginInfo loginInfo);
+
+	List<Integer> getStudentIdByClassId(Integer studentClassId);
 }

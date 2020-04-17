@@ -1,6 +1,6 @@
 package com.trd.oecms.web.interceptor;
 
-import com.trd.oecms.entities.LoginInfo;
+import com.trd.oecms.model.LoginInfo;
 import com.trd.oecms.utils.UserUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

@@ -1,63 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.trd.oecms.dao.ExpCourseMapper">
-  <resultMap id="BaseResultMap" type="com.trd.oecms.entities.ExpCourse">
-    <!--
-     提示：这是mybatis逆向工程生成的xml文件
-     date：2020-04-05 16:55
-    -->
-    <id column="exp_course_id" jdbcType="INTEGER" property="expCourseId" />
-    <result column="exp_course_name" jdbcType="VARCHAR" property="expCourseName" />
-    <result column="exp_course_description" jdbcType="VARCHAR" property="expCourseDescription" />
-    <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
-    <result column="exp_course_status" jdbcType="TINYINT" property="expCourseStatus" />
-    <result column="exp_course_create_time" jdbcType="TIMESTAMP" property="expCourseCreateTime" />
-    <result column="formal_course_id" jdbcType="INTEGER" property="formalCourseId" />
-  </resultMap>
-
-  <insert id="insert" useGeneratedKeys="true" keyProperty="exp_course_id">
-    <!--
-     提示：这是mybatis逆向工程生成的xml文件
-     date：2020-04-05 16:55
-    -->
-    insert into `exp_course` (exp_course_id, exp_course_name, exp_course_description, 
-      teacher_id, exp_course_status, exp_course_create_time, 
-      formal_course_id)
-    values (#{expCourseId,jdbcType=INTEGER}, #{expCourseName,jdbcType=VARCHAR}, #{expCourseDescription,jdbcType=VARCHAR}, 
-      #{teacherId,jdbcType=INTEGER}, #{expCourseStatus,jdbcType=TINYINT}, #{expCourseCreateTime,jdbcType=TIMESTAMP}, 
-      #{formalCourseId,jdbcType=INTEGER})
-  </insert>
-  <update id="updateByPrimaryKey">
-    <!--
-     提示：这是mybatis逆向工程生成的xml文件
-     date：2020-04-05 16:55
-    -->
-    update `exp_course`
-    set exp_course_name = #{expCourseName,jdbcType=VARCHAR},
-      exp_course_description = #{expCourseDescription,jdbcType=VARCHAR},
-      teacher_id = #{teacherId,jdbcType=INTEGER},
-      exp_course_status = #{expCourseStatus,jdbcType=TINYINT},
-      exp_course_create_time = #{expCourseCreateTime,jdbcType=TIMESTAMP},
-      formal_course_id = #{formalCourseId,jdbcType=INTEGER}
-    where exp_course_id = #{expCourseId,jdbcType=INTEGER}
-  </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
-    <!--
-     提示：这是mybatis逆向工程生成的xml文件
-     date：2020-04-05 16:55
-    -->
-    select exp_course_id, exp_course_name, exp_course_description, teacher_id, exp_course_status, 
-    exp_course_create_time, formal_course_id
-    from `exp_course`
-    where exp_course_id = #{expCourseId,jdbcType=INTEGER}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    <!--
-     提示：这是mybatis逆向工程生成的xml文件
-     date：2020-04-05 16:55
-    -->
-    select exp_course_id, exp_course_name, exp_course_description, teacher_id, exp_course_status, 
-    exp_course_create_time, formal_course_id
-    from `exp_course`
-  </select>
+    <resultMap id="BaseResultMap" type="com.trd.oecms.model.ExpCourse">
+        <!-- date： 2020-04-14 10:25 -->
+        <id column="exp_course_id" jdbcType="INTEGER" property="expCourseId"/>
+        <result column="exp_course_name" jdbcType="VARCHAR" property="expCourseName"/>
+        <result column="exp_course_description" jdbcType="VARCHAR" property="expCourseDescription"/>
+        <result column="exp_course_location" jdbcType="VARCHAR" property="expCourseLocation"/>
+        <result column="exp_course_time" jdbcType="TIMESTAMP" property="expCourseTime"/>
+        <result column="teacher_id" jdbcType="INTEGER" property="teacherId"/>
+        <result column="student_class_id" jdbcType="INTEGER" property="studentClassId"/>
+        <result column="exp_course_status" jdbcType="TINYINT" property="expCourseStatus"/>
+        <result column="exp_course_material" jdbcType="VARCHAR" property="expCourseMaterial"/>
+        <result column="material_upload_count" jdbcType="TINYINT" property="materialUploadCount"/>
+        <result column="exp_course_create_time" jdbcType="TIMESTAMP" property="expCourseCreateTime"/>
+    </resultMap>
+    <!--分页查询的映射-->
+    <resultMap id="paginationResultMap" type="com.trd.oecms.model.ExpCourse" extends="BaseResultMap">
+        <result column="class_name" jdbcType="VARCHAR" property="className"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="expCourseId">
+        <!-- date： 2020-04-14 10:25 -->
+        insert into `exp_course` (exp_course_name, exp_course_description, exp_course_location,
+        exp_course_time, teacher_id, student_class_id,
+        exp_course_status, exp_course_material, material_upload_count, exp_course_create_time)
+        values (#{expCourseName,jdbcType=VARCHAR}, #{expCourseDescription,jdbcType=VARCHAR},
+        #{expCourseLocation,jdbcType=VARCHAR},
+        #{expCourseTime,jdbcType=TIMESTAMP}, #{teacherId,jdbcType=INTEGER}, #{studentClassId,jdbcType=INTEGER},
+        #{expCourseStatus,jdbcType=TINYINT}, #{expCourseMaterial,jdbcType=VARCHAR},#{materialUploadCount,jdbcType=TINYINT}
+        #{expCourseCreateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <!--管理员批量插入数据-->
+    <insert id="insertBatch" useGeneratedKeys="true" keyProperty="expCourseId" parameterType="java.util.List">
+        insert into `exp_course`
+        (exp_course_name, exp_course_location,exp_course_time, teacher_id, student_class_id, exp_course_create_time)
+        <trim suffixOverrides=",">
+            <foreach collection="list" item="expCourse" open="values ">
+                (#{expCourse.expCourseName}, #{expCourse.expCourseLocation}, #{expCourse.expCourseTime},
+                #{expCourse.teacherId}, #{expCourse.studentClassId}, #{expCourse.expCourseCreateTime}),
+            </foreach>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKey">
+        <!-- date： 2020-04-14 10:25 -->
+        update `exp_course`
+        set exp_course_name = #{expCourseName,jdbcType=VARCHAR},
+        exp_course_description = #{expCourseDescription,jdbcType=VARCHAR},
+        exp_course_location = #{expCourseLocation,jdbcType=VARCHAR},
+        exp_course_time = #{expCourseTime,jdbcType=TIMESTAMP},
+        teacher_id = #{teacherId,jdbcType=INTEGER},
+        student_class_id = #{studentClassId,jdbcType=INTEGER},
+        exp_course_status = #{expCourseStatus,jdbcType=TINYINT},
+        exp_course_material = #{expCourseMaterial,jdbcType=VARCHAR},
+        material_upload_count = #{materialUploadCount,jdbcType=TINYINT},
+        exp_course_create_time = #{expCourseCreateTime,jdbcType=TIMESTAMP}
+        where exp_course_id = #{expCourseId,jdbcType=INTEGER}
+    </update>
+    <!--选择性的更新数据-->
+    <update id="updateSelectiveById">
+        update `exp_course`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="course.expCourseName != null and course.expCourseName != '' ">
+                exp_course_name = #{course.expCourseName,jdbcType=VARCHAR},
+            </if>
+            <if test="course.expCourseDescription != null and course.expCourseDescription != '' ">
+                exp_course_description = #{course.expCourseDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="course.expCourseLocation != null and course.expCourseLocation != '' ">
+                exp_course_location = #{course.expCourseLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="course.expCourseTime != null">
+                exp_course_time = #{course.expCourseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="course.teacherId != null">
+                teacher_id = #{course.teacherId,jdbcType=INTEGER},
+            </if>
+            <if test="course.studentClassId != null">
+                student_class_id = #{course.studentClassId,jdbcType=INTEGER},
+            </if>
+            <if test="course.expCourseStatus != null">
+                exp_course_status = #{course.expCourseStatus,jdbcType=TINYINT},
+            </if>
+            <if test="course.expCourseMaterial != null and course.expCourseLocation != '' ">
+                exp_course_material = #{course.expCourseMaterial,jdbcType=VARCHAR},
+            </if>
+            <if test="addCount == true">
+                material_upload_count = material_upload_count + 1
+            </if>
+        </trim>
+        where exp_course_id = #{course.expCourseId,jdbcType=INTEGER}
+    </update>
+    <sql id="AllSelect">
+        select exp_course_id, exp_course_name, exp_course_description, exp_course_location,
+               exp_course_time, teacher_id, student_class_id, exp_course_status, exp_course_material,
+               material_upload_count,exp_course_create_time
+        from `exp_course`
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        <!-- date： 2020-04-14 10:25 -->
+       <include refid="AllSelect"/>
+        where exp_course_id = #{expCourseId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <!-- date： 2020-04-14 10:25 -->
+        <include refid="AllSelect"/>
+    </select>
+    <!--教师分页查询（可按条件）实验课程信息-->
+    <sql id="list">
+        from exp_course e
+        join student_class s on e.student_class_id = s.student_class_id
+        <where>
+            e.teacher_id = #{cond.teacherId}
+            <if test="cond.expCourseStatus != null">
+                and e.exp_course_status = #{cond.expCourseStatus}
+            </if>
+            <if test="cond.className != null and cond.className != '' ">
+                and class_name like '%${cond.className}%'
+            </if>
+            <if test="cond.expCourseLocation != null">
+                and e.exp_course_location like '%${cond.expCourseLocation}%'
+            </if>
+            <if test="cond.startTime != null">
+                and e.exp_course_time &gt; #{cond.startTime}
+            </if>
+            <if test="cond.endTime != null">
+                and e.exp_course_time &lt; #{cond.endTime}
+            </if>
+        </where>
+    </sql>
+    <select id="listExpCourse" resultMap="paginationResultMap">
+        SELECT e.*, s.class_name
+        <include refid="list"/>
+        ORDER BY e.exp_course_id
+        limit #{offset}, #{size}
+    </select>
+    <select id="listExpCourseCount" resultType="int">
+        SELECT count(e.exp_course_id)
+        <include refid="list"/>
+    </select>
 </mapper>

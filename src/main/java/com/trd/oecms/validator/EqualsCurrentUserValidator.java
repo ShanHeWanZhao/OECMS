@@ -1,8 +1,8 @@
 package com.trd.oecms.validator;
 
 import com.trd.oecms.annotation.EqualsCurrentUser;
-import com.trd.oecms.entities.LoginInfo;
-import com.trd.oecms.entities.enums.UserInfoType;
+import com.trd.oecms.model.LoginInfo;
+import com.trd.oecms.constants.enums.LoginInfoTypeEnum;
 import com.trd.oecms.utils.UserUtil;
 
 import javax.validation.ConstraintValidator;
@@ -15,7 +15,7 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class EqualsCurrentUserValidator implements ConstraintValidator<EqualsCurrentUser, Object> {
 
-    private UserInfoType infoType;
+    private LoginInfoTypeEnum infoType;
     private boolean requireSamePassword;
 
     @Override
