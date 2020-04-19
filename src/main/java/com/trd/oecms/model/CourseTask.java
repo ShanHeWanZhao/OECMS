@@ -1,6 +1,8 @@
 package com.trd.oecms.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -13,8 +15,10 @@ import java.util.Date;
  * @date 2020-04-14 10:25
  */
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class CourseTask implements Serializable {
+public class CourseTask extends BaseClassName implements Serializable {
     /**
      * 课程任务的id
      */
@@ -43,7 +47,7 @@ public class CourseTask implements Serializable {
     /**
      * 该学生的该实验课的得分
      */
-    private BigDecimal expCourseGrade;
+    private Double expCourseGrade;
 
     /**
      * 该学生的该实验课程完成状态（未开始，进行中，已提交，已完成）

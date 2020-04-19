@@ -21,17 +21,21 @@ spring:
   http:
     multipart:
       max-file-size: 5MB
-  jackson:  # 格式化日期
+  # 格式化日期
+  jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+# 打开mybatis的debug级别日志，查看sql语句
 logging:
   level:
-    com.trd.oecms.dao: debug # 打开日志，查看sql语句
+    com.trd.oecms.dao: debug
+# openOffice相关配置
 jodconverter:
   local:
     enabled: true
     max-tasks-per-process: 20
     port-numbers: 8888
+# 实验报告相关
 experimentalCourse:
   resources:
     word:

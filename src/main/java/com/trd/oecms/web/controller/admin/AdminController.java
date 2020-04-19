@@ -26,7 +26,12 @@ public class AdminController {
     @Autowired
     private ILoginInfoService loginInfoService;
 
-    @RequireAdmin
+	/**
+	 * 管理员查看用户信息页面导航
+	 * @param model
+	 * @return
+	 */
+	@RequireAdmin
     @GetMapping("getAllExcludeAdmin")
     public String toListPage(Model model) {
         UserUtil.addLoginInfo(model);

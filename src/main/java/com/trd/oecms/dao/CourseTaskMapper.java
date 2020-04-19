@@ -1,6 +1,10 @@
 package com.trd.oecms.dao;
 
 import com.trd.oecms.model.CourseTask;
+import com.trd.oecms.query.TeacherPaginationCourseTask;
+import com.trd.oecms.query.CourseTaskQueryConditions;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -17,4 +21,8 @@ public interface CourseTaskMapper {
     int updateByPrimaryKey(CourseTask record);
 
     int insertBatch(List<CourseTask> courseTaskList);
+
+	List<TeacherPaginationCourseTask> listCourseTask(@Param("offset") int offset, @Param("size") Integer pageSize, @Param("cond") CourseTaskQueryConditions conditions);
+
+	int listCourseTaskCount(@Param("offset") int offset, @Param("size") Integer pageSize, @Param("cond") CourseTaskQueryConditions conditions);
 }

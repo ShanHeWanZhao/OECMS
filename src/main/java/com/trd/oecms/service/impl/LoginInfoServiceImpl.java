@@ -21,6 +21,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class LoginInfoServiceImpl implements ILoginInfoService {
+
 	@Autowired
 	private LoginInfoMapper loginInfoMapper;
 

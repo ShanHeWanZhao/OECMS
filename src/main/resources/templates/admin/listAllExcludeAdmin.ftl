@@ -1,50 +1,33 @@
 <@override name="title">所有登录信息</@override>
 <@override name="data">
     <div id="vm">
-        <el-row type="flex" id="searchCondition">
-            <el-col :span="4" :offset="3">
-                <el-form >
-                    <!--下拉选择框-->
-                    <el-form-item label="用户类型">
-                        <el-select v-model="searchForm.userType" clearable placeholder="请选择">
-                            <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-            </el-col>
-            <el-col :span="4">
-                <el-form >
-                    <el-form-item label="用户状态">
-                        <el-select v-model="searchForm.userStatus" clearable placeholder="请选择">
-                            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-            </el-col>
-            <el-col :span="4">
-                <el-form :inline="true">
-                    <el-form-item label="用户账号">
-                        <el-input v-model="searchForm.accountNumber" placeholder="请输入用户账号" clearable></el-input>
-                    </el-form-item>
-                </el-form>
-            </el-col>
-            <el-col :span="4">
-                <el-form :inline="true">
-                    <el-form-item label="用户姓名">
-                        <el-input v-model="searchForm.userName" placeholder="请输入用户姓名" clearable></el-input>
-                    </el-form-item>
-                </el-form>
-            </el-col>
-            <el-col :span="4">
-                <el-form>
-                    <el-form-item>
-                        <el-button type="primary" icon="el-icon-search" @click="searchLoginInfo">查询</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-col>
-        </el-row>
+        <div style="width:100%;text-align:center">
+        <el-form :inline="true" id="searchCondition" lable-width="150px">
+            <!--下拉选择框-->
+            <el-form-item label="用户类型">
+                <el-select v-model="searchForm.userType" clearable placeholder="请选择">
+                    <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="用户状态">
+                <el-select v-model="searchForm.userStatus" clearable placeholder="请选择">
+                    <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="用户账号">
+                <el-input v-model="searchForm.accountNumber" placeholder="请输入用户账号" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="用户姓名">
+                <el-input v-model="searchForm.userName" placeholder="请输入用户姓名" clearable></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="searchLoginInfo">查询</el-button>
+            </el-form-item>
+        </el-form>
+        </div>
+        <#--对话框-->
         <el-dialog title="编辑用户" :visible.sync="dialogFormVisible" @close="resetForm" width="35%" :close-on-click-modal="false">
             <el-form v-if="dialogFormVisible" :model="editLoginInfoForm" ref="editLoginInfoForm">
                 <!-- 脚本名输入框 -->
@@ -232,10 +215,10 @@
 <style>
     #vm {
         position: relative;
-        top: 100px;
+        top: 30px;
     }
     #searchCondition {
         position: relative;
-        bottom: 50px;
+        bottom: 10px;
     }
 </style>

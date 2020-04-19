@@ -13,6 +13,14 @@
         <result column="course_task_create_time" jdbcType="TIMESTAMP" property="courseTaskCreateTime"/>
         <result column="course_task_comment" jdbcType="VARCHAR" property="courseTaskComment"/>
     </resultMap>
+    <!--教师分页查看学生的任务情况-->
+    <resultMap id="TeacherPaginationResultMap" type="com.trd.oecms.query.TeacherPaginationCourseTask"
+               extends="BaseResultMap">
+        <result column="class_name" property="className"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_class_id" property="userClassId"/>
+        <result column="exp_course_name" property="expCourseName"/>
+    </resultMap>
     <insert id="insert" useGeneratedKeys="true" keyProperty="courseTaskId" keyColumn="course_task_id">
         <!-- date： 2020-04-14 10:25 -->
         insert into `course_task` (exp_course_id, student_id,
@@ -29,7 +37,8 @@
         insert into `course_task` (exp_course_id, student_id, teacher_id, course_task_status, course_task_create_time)
         <trim suffixOverrides=",">
             <foreach collection="list" item="task" open="values ">
-                (#{task.expCourseId}, #{task.studentId},#{task.teacherId}, #{task.courseTaskStatus},#{task.courseTaskCreateTime}),
+                (#{task.expCourseId}, #{task.studentId},#{task.teacherId},
+                #{task.courseTaskStatus},#{task.courseTaskCreateTime}),
             </foreach>
         </trim>
     </insert>
@@ -58,5 +67,46 @@
         select course_task_id, exp_course_id, student_id, teacher_id, exp_course_result_data,
         exp_course_grade, course_task_status, course_task_create_time, course_task_comment
         from `course_task`
+    </select>
+    <sql id="teacherList">
+        from  course_task co /* 课程任务表 */
+        join login_info lo on co.student_id = lo.user_id /* 登录表 */
+        join exp_course ex on ex.exp_course_id = co.exp_course_id  /* 实验课程表 */
+        join (
+        select cs.*, st.class_name
+        from student_class st
+        join (
+        select innerco.course_task_id, innerlo.user_class_id
+        from  course_task innerco
+        join login_info innerlo on innerco.student_id = innerlo.user_id
+        )
+        as cs
+        on cs.user_class_id = st.student_class_id
+        ) as innercs on innercs.course_task_id=co.course_task_id
+        <where>
+            co.teacher_id = #{cond.teacherId}
+            <if test="cond.courseTaskStatus != null">
+                and co.course_task_status = #{cond.courseTaskStatus}   /* 完成情况*/
+            </if>
+            <if test="cond.expCourseName != null and cond.expCourseName != '' ">
+                and ex.exp_course_name like '%${cond.expCourseName}%'   /* 完成情况*/
+            </if>
+            <if test="cond.studentName != null and cond.studentName != '' ">
+                and lo.user_name like '%${cond.studentName}%' /* 学生姓名*/
+            </if>
+            <if test="cond.className != null and cond.className != '' ">
+                and innercs.class_name like '%${cond.className}%'   /* 上课班级*/
+            </if>
+        </where>
+    </sql>
+    <select id="listCourseTask" resultMap="TeacherPaginationResultMap">
+        select co.*, lo.user_name, lo.user_class_id, ex.exp_course_name, innercs.class_name
+        <include refid="teacherList"/>
+        ORDER BY co.course_task_id
+        limit #{offset}, #{size}
+    </select>
+    <select id="listCourseTaskCount" resultType="java.lang.Integer">
+        select count(co.course_task_id)
+        <include refid="teacherList"/>
     </select>
 </mapper>

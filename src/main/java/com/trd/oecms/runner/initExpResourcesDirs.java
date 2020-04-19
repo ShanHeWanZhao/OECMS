@@ -15,6 +15,7 @@ import java.io.File;
 @Component
 @Slf4j
 public class initExpResourcesDirs implements ApplicationRunner {
+
     @Value("${experimentalCourse.resources.word.materials}")
     private String teachMaterialsPath;
     @Value("${experimentalCourse.resources.word.result_data}")

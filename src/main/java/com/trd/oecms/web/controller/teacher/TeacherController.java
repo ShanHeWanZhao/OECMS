@@ -4,6 +4,7 @@ import com.trd.oecms.annotation.RequireTeacher;
 import com.trd.oecms.model.ExpCourse;
 import com.trd.oecms.query.CourseTaskQueryConditions;
 import com.trd.oecms.query.ExpCourseQueryConditions;
+import com.trd.oecms.service.ICourseTaskService;
 import com.trd.oecms.service.IExpCourseService;
 import com.trd.oecms.utils.DateUtils;
 import com.trd.oecms.utils.FileUtils;
@@ -40,6 +41,8 @@ public class TeacherController {
     private DocumentConverter documentConverter;
     @Autowired
     private IExpCourseService expCourseService;
+    @Autowired
+	private ICourseTaskService courseTaskService;
 
     // 讲义存放路径
     @Value("${experimentalCourse.resources.word.materials}")
@@ -103,8 +106,7 @@ public class TeacherController {
                                     @RequestParam("pageSize") Integer pageSize, CourseTaskQueryConditions conditions) {
         try{
             int offset = (pageNum - 1) * pageSize;
-            System.out.println(conditions);
-            return JsonResult.ok();
+            return courseTaskService.listCourseTask(offset, pageSize, conditions);
         }catch(Exception e){
             e.printStackTrace();
             return JsonResult.error(e.getMessage());

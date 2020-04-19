@@ -53,7 +53,7 @@
             <el-menu-item index="/logout">退出</el-menu-item>
         </el-submenu>
     </el-menu>
-    <el-dialog title="修改密码（提示：密码修改成功后，将会重新登录）" :visible.sync="dialogFormVisible" width="30%" :close-on-click-modal="false">
+    <el-dialog title="修改密码（提示：密码修改成功后，将会重新登录）" :visible.sync="dialogFormVisible" width="35%" :close-on-click-modal="false">
         <el-form v-if="dialogFormVisible" :model="modifyPasswordForm" :rules="rules" ref="passwordForm">
             <el-form-item  label="旧密码" prop="oldPassword" :label-width="formLabelWidth" style="width: 70%">
                 <el-input type="password" v-model="modifyPasswordForm.oldPassword" auto-complete="off" placeholder="请输入旧密码"></el-input>
@@ -151,7 +151,7 @@
     new Ctor().$mount('#menu');
 </script>
 </html>
-<style>
+<style scoped>
     .el-dialog__title{
         line-height:28px;
         font-size:20px;
@@ -159,6 +159,12 @@
     }
     .el-menu-item.is-active {
         background-color: #bc9cb5 !important;
+    }
+    .el-table th.gutter{
+        display: table-cell!important;
+    }
+    .el-table td, .el-table th{
+        text-align: center !important;
     }
     /*.el-aside {*/
     /*    color: #f64117;*/

@@ -24,46 +24,54 @@
             </el-form-item>
         </el-form>
         </div>
-
+        <#--对话框-->
         <el-dialog title="打分" :visible.sync="dialogFormVisible" @close="resetForm" :close-on-click-modal="false">
-            <el-form v-if="dialogFormVisible" :model="editExpCourseForm" ref="editExpCourseForm" style="width: 60%;">
-                <el-form-item label="完成情况" prop="courseTaskStatus" :label-width="formLabelWidth" clearable>
-                    <el-select v-model="editExpCourseForm.courseTaskStatus" placeholder="请选择">
-                        <el-option
-                                v-for="item in courseTaskStatusOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
+            <el-form v-if="dialogFormVisible" :model="editCourseTaskForm" ref="editCourseTaskForm" style="width: 60%;">
+                <el-form-item label="实验得分" prop="expCourseGrade" :label-width="formLabelWidth" clearable>
+                    <el-input-number v-model="editCourseTaskForm.expCourseGrade"
+                                     :precision="2"
+                                     :min="0"
+                                     :max="100" clearable></el-input-number>
                 </el-form-item>
                 <!-- 备注框 -->
-                <el-form-item  label="评语" prop="expCourseDescription" :label-width="formLabelWidth" clearable>
-                    <el-input type="textarea" :rows="4" placeholder="请输入备注信息" v-model="editExpCourseForm.expCourseDescription"></el-input>
+                <el-form-item  label="实验评语" prop="expCourseDescription" :label-width="formLabelWidth" clearable>
+                    <el-input type="textarea" :rows="6"
+                              placeholder="请输入实验评语"
+                              v-model="editCourseTaskForm.expCourseDescription"
+                              maxlength="510"
+                              show-word-limit></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="resetForm">重 置</el-button>
-                <el-button type="primary" @click="updateExpCourse">保 存</el-button>
+                <el-button type="primary" @click="submitResult">保 存</el-button>
             </div>
         </el-dialog>
         <el-table ref="multipleTable" border fit :data="tableData" highlight-current-row style="width: 100%;font-size: 12px;">
             <el-table-column type="index" width="50" label="行号"></el-table-column>
+            <el-table-column prop="courseTaskId" label="课程任务ID" v-if='show'></el-table-column>
             <el-table-column prop="expCourseName" label="实验名称"></el-table-column>
-            <el-table-column prop="studentName" sortable label="学生姓名"></el-table-column>
+            <el-table-column prop="userName" sortable label="学生姓名"></el-table-column>
             <el-table-column prop="className" sortable label="学生班级"></el-table-column>
             <el-table-column prop="courseTaskStatus" sortable label="完成情况" :formatter="expCourseStatusFormat"></el-table-column>
             <el-table-column prop="courseTaskCreateTime" sortable label="任务创建时间"></el-table-column>
             <el-table-column prop="showResult" sortable label="查看结果">
                 <template slot-scope="scope">
-                    <el-button @click="showResultData(scope.row)" type="primary" icon="el-icon-search">查 看</el-button>
+                    <el-button type="danger"
+                               v-else
+                               v-if='scope.row.courseTaskStatus < 2'
+                               disabled>待 提 交</el-button>
+                    <el-button @click="showResultData(scope.row)"
+                               type="primary"
+                               icon="el-icon-search"
+                               v-else>查 看</el-button>
                 </template>
             </el-table-column>
-            <el-table-column prop="expCourseGrade" label="得分情况"></el-table-column>
-            <el-table-column prop="courseTaskComment" label="评语"></el-table-column>
+            <el-table-column prop="expCourseGrade" label="得分情况" :formatter="expCourseGradeFormat"></el-table-column>
+            <el-table-column prop="courseTaskComment" label="评语" :formatter="courseTaskCommentFormat"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" icon="el-icon-edit">编辑</el-button>
+                    <el-button @click="handleClick(scope.row)" type="text" icon="el-icon-edit" v-if='scope.row.courseTaskStatus > 1'>打 分</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -88,12 +96,10 @@
                 pageSize: 7,
                 dialogFormVisible: false,
                 formLabelWidth: '100px',
-                editExpCourseForm:{
-                    expCourseName: null,
-                    studentName: '',
-                    courseTaskStatus: 0,
+                editCourseTaskForm:{
                     expCourseDescription:'',
-                    expCourseTime: null
+                    expCourseGrade: 0,
+                    courseTaskId: null,
                 },
                 searchForm:{
                     courseTaskStatus: null,
@@ -159,22 +165,18 @@
             },
             // 单行数据编辑
             handleClick: function (row) {
-                this.editExpCourseForm.expCourseName = row.expCourseName;
-                this.editExpCourseForm.studentName = row.studentName;
-                this.editExpCourseForm.studentName = row.studentName;
-                // 注意：先把数字转换为String
-                this.editExpCourseForm.courseTaskStatus = String(row.courseTaskStatus);
-                this.editExpCourseForm.expCourseTime = row.expCourseTime;
-                this.editExpCourseForm.expCourseDescription = row.expCourseDescription;
+                this.editCourseTaskForm.expCourseDescription = row.expCourseDescription;
+                this.editCourseTaskForm.expCourseGrade = row.expCourseGrade;
+                this.editCourseTaskForm.courseTaskId = row.courseTaskId;
                 this.dialogFormVisible = true;
             },
             // 重置表单
             resetForm: function(){
-                this.$refs['editExpCourseForm'].resetFields();
+                this.$refs['editCourseTaskForm'].resetFields();
             },
-            // 更新实验课程信息
-            updateExpCourse: function(){
-                this.$http.post('/teacher/updateExpCourse', this.editExpCourseForm)
+            // 提交打分
+            submitResult: function(){
+                this.$http.post('/teacher/submitResult', this.editCourseTaskForm)
                     .then((response) => {
                         if (response.data.code===0) {
                             this.$message.success(response.data.data);
@@ -197,6 +199,20 @@
                     case 3:
                         return '已完成';
                 }
+            },
+            // 格式化 实验得分
+            expCourseGradeFormat: function (row) {
+                if (!row.expCourseGrade){
+                    return '未打分';
+                }
+                return row.expCourseGrade;
+            },
+            // 格式化 实验评语
+            courseTaskCommentFormat: function (row) {
+                if (!row.courseTaskComment){
+                    return '待评价';
+                }
+                return row.courseTaskComment;
             }
         }
     })

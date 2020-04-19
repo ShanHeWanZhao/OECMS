@@ -46,19 +46,19 @@
         </div>
 
         <el-dialog title="编辑课程" :visible.sync="dialogFormVisible" @close="resetForm" :close-on-click-modal="false">
-            <el-form v-if="dialogFormVisible" :model="editExpCourseForm" ref="editExpCourseForm" style="width: 60%;">
-                <el-form-item   label="实验课程名称" prop="expCourseName" :label-width="formLabelWidth" clearable>
-                    <el-input v-model="editExpCourseForm.expCourseName" auto-complete="off" placeholder="请输入新的用户姓名"></el-input>
+            <el-form v-if="dialogFormVisible"  :model="editExpCourseForm" ref="editExpCourseForm" style="width: 60%;">
+                <el-form-item   label="实验课程名称" prop="expCourseName" :label-width="formLabelWidth">
+                    <el-input v-model="editExpCourseForm.expCourseName" placeholder="请输入新的实验名称" clearable></el-input>
                 </el-form-item>
-                <el-form-item   label="实验地点" prop="expCourseLocation" :label-width="formLabelWidth" clearable>
-                    <el-input v-model="editExpCourseForm.expCourseLocation" auto-complete="off" placeholder="请输入新的用户姓名"></el-input>
+                <el-form-item   label="实验地点" prop="expCourseLocation" :label-width="formLabelWidth">
+                    <el-input v-model="editExpCourseForm.expCourseLocation"  placeholder="请输入新的实验地点" clearable></el-input>
                 </el-form-item>
                 <el-form-item   label="上课时间" prop="expCourseTime" :label-width="formLabelWidth"  clearable>
                     <el-date-picker
                             v-model="editExpCourseForm.expCourseTime"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             type="datetime"
-                            placeholder="请选择日期时间">
+                            placeholder="请选择上课时间">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="课程状态" prop="expCourseStatus" :label-width="formLabelWidth" clearable>
@@ -73,7 +73,12 @@
                 </el-form-item>
                 <!-- 备注框 -->
                 <el-form-item  label="课程简单描述" prop="expCourseDescription" :label-width="formLabelWidth" clearable>
-                    <el-input type="textarea" :rows="4" placeholder="请输入备注信息" v-model="editExpCourseForm.expCourseDescription"></el-input>
+                    <el-input type="textarea"
+                              :rows="5"
+                              placeholder="请对该课程进行简单地描述！"
+                              v-model="editExpCourseForm.expCourseDescription"
+                              maxlength="10"
+                              show-word-limit></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -85,11 +90,11 @@
             <el-table-column type="index" width="50" label="行号"></el-table-column>
             <el-table-column prop="expCourseId" label="实验课程ID" v-if='show'></el-table-column>
             <el-table-column prop="expCourseName" sortable label="实验名称"></el-table-column>
-            <el-table-column prop="expCourseLocation" sortable label="实验地点"></el-table-column>
+            <el-table-column prop="expCourseLocation" width="100" sortable label="实验地点"></el-table-column>
             <el-table-column prop="expCourseTime" sortable label="上课时间"></el-table-column>
             <el-table-column prop="className" sortable label="上课班级" ></el-table-column>
             <el-table-column prop="expCourseStatus" sortable label="课程状态" :formatter="expCourseStatusFormat"></el-table-column>
-            <el-table-column prop="materialUploadCount" label="实验讲义上传次数（最多上传3次）"></el-table-column>
+            <el-table-column prop="materialUploadCount" label="上传次数（最多上传3次）"></el-table-column>
             <el-table-column prop="userClassName" sortable label="上传/查看实验讲义">
                 <template slot-scope="scope" >
                     <el-row>
@@ -105,13 +110,11 @@
                                 :on-success="handleSuccess">
                             <el-button  type="primary"
                                         size="small"
-                                        class="el-icon-upload"
-                                        v-if='scope.row.materialUploadCount < 100'>上传</el-button>
+                                        v-if='scope.row.materialUploadCount < 3'>上传</el-button>
                         </el-upload>
                         <el-button @click="showTeachMaterial(scope.row)"
                                    type="success"
                                    size="small"
-                                   icon="el-icon-search"
                                    v-if='scope.row.materialUploadCount > 0'>查看</el-button>
                         </el-row>
                 </template>
@@ -120,7 +123,7 @@
             <el-table-column prop="expCourseDescription" sortable label="简单描述" ></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" icon="el-icon-edit">编辑</el-button>
+                    <el-button @click="handleClick(scope.row)" type="text" icon="el-icon-edit">修改</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -144,7 +147,7 @@
                 total: 0,
                 pageSize: 7,
                 dialogFormVisible: false,
-                formLabelWidth: '100px',
+                formLabelWidth: '125px',
                 editExpCourseForm:{
                     expCourseId: null,
                     expCourseName: '',
@@ -307,11 +310,11 @@
 <style>
     #vm {
         position: relative;
-        top: 100px;
+        top: 30px;
     }
     #searchCondition {
         position: relative;
-        bottom: 50px;
+        bottom: 10px;
     }
     .inlineDisplay{
         display: inline;
