@@ -12,46 +12,61 @@ CREATE TABLE `login_info`
     PRIMARY KEY (`user_id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8;
+INSERT INTO `login_info` VALUES (null, 'admin', '1234', null, 0, '管理员', 2, -1);
+
 /* 实验课程*/
 CREATE TABLE `exp_course`
 (
-    `exp_course_id`             int(11) UNSIGNED    NOT NULL AUTO_INCREMENT COMMENT '实验课程id',
-    `exp_course_name`           varchar(50)         NOT NULL DEFAULT '' COMMENT '实验课名称',
-    `exp_course_description`    varchar(512)        NOT NULL DEFAULT '' COMMENT '实验课的基本描述',
-    `exp_course_location`       varchar(50)         NOT NULL DEFAULT '' COMMENT '上课地点',
-    `exp_course_time`           timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上课时间',
-    `teacher_id`                int(11) UNSIGNED    NOT NULL COMMENT '任课老师id',
-    `student_class_id`          int(11) UNSIGNED    NOT NULL COMMENT '上课班级id',
-    `exp_course_status`         tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '实验课程状态（未开始，进行中，已取消，已结束）',
-    `exp_course_material`       varchar(255)        NOT NULL DEFAULT '' COMMENT '课程讲义存放的路径',
-    `material_upload_count` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '实验讲义上传的次数（最多上传3次）',
-    `exp_course_create_time`    timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `exp_course_id`          int(11) UNSIGNED    NOT NULL AUTO_INCREMENT COMMENT '实验课程id',
+    `exp_course_name`        varchar(50)         NOT NULL DEFAULT '' COMMENT '实验课名称',
+    `exp_course_description` varchar(512)        NOT NULL DEFAULT '' COMMENT '实验课的基本描述',
+    `exp_course_location`    varchar(50)         NOT NULL DEFAULT '' COMMENT '上课地点',
+    `exp_course_time`        timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上课时间',
+    `teacher_id`             int(11) UNSIGNED    NOT NULL COMMENT '任课老师id',
+    `student_class_id`       int(11) UNSIGNED    NOT NULL COMMENT '上课班级id',
+    `exp_course_status`      tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '实验课程状态（未开始，进行中，已取消，已结束）',
+    `exp_course_material`    varchar(255)        NOT NULL DEFAULT '' COMMENT '课程讲义存放的路径',
+    `material_upload_count`  tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '实验讲义上传的次数（最多上传3次）',
+    `exp_course_create_time` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`exp_course_id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8;
+
 /* 实验课程任务的情况*/
 CREATE TABLE `course_task`
 (
-    `course_task_id`          int(11) UNSIGNED       NOT NULL AUTO_INCREMENT COMMENT '课程任务的id',
-    `exp_course_id`           int(11) UNSIGNED       NOT NULL COMMENT '实验课的id',
-    `student_id`              int(11) UNSIGNED       NOT NULL COMMENT '上课学生id',
-    `teacher_id`              int(11) UNSIGNED       NOT NULL COMMENT '任课老师id',
-    `exp_course_result_data`  varchar(100)           NOT NULL DEFAULT '' COMMENT '实验课的结果数据的存放地址',
-    `exp_course_grade`        decimal(5, 2) UNSIGNED NULL COMMENT '该学生的该实验课的得分',
-    `course_task_status`      tinyint(255) UNSIGNED  NOT NULL DEFAULT 0 COMMENT '该学生的该实验课程完成状态（未开始，进行中，已提交，已完成）',
-    `course_task_create_time` timestamp              NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `course_task_comment`     varchar(512)           NOT NULL DEFAULT '' COMMENT '该学生的实验课程评语',
+    `course_task_id`           int(11) UNSIGNED       NOT NULL AUTO_INCREMENT COMMENT '课程任务的id',
+    `exp_course_id`            int(11) UNSIGNED       NOT NULL COMMENT '实验课的id',
+    `student_id`               int(11) UNSIGNED       NOT NULL COMMENT '上课学生id',
+    `teacher_id`               int(11) UNSIGNED       NOT NULL COMMENT '任课老师id',
+    `exp_course_result_data`   varchar(255)           NOT NULL DEFAULT '' COMMENT '实验课的结果数据的存放地址',
+    `result_data_upload_count` tinyint(3)             NOT NULL DEFAULT 0 COMMENT '学生实验结果上传的次数（最多上传3次）',
+    `exp_course_grade`         decimal(5, 2) UNSIGNED NULL COMMENT '该学生的该实验课的得分',
+    `course_task_status`       tinyint(3) UNSIGNED  NOT NULL DEFAULT 0 COMMENT '该学生的该实验课程完成状态（未开始，进行中，已提交，已完成）',
+    `course_task_create_time`  timestamp              NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `course_task_comment`      varchar(512)           NOT NULL DEFAULT '' COMMENT '该学生的实验课程评语',
     PRIMARY KEY (`course_task_id`),
     INDEX `student_index` (`student_id`) USING BTREE COMMENT '学生id索引'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8;
+
 /* 学生班级*/
 CREATE TABLE `student_class`
 (
-    `student_class_id`  int(11) UNSIGNED      NOT NULL AUTO_INCREMENT COMMENT '班级的id',
-    `class_name`        varchar(50)           NOT NULL COMMENT '班级名字',
-    `class_status`      tinyint(255) UNSIGNED NOT NULL DEFAULT 0 COMMENT '班级状态（0 -> 可操作。1 -> 不可操作）',
-    `class_create_time` timestamp             NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '班级创建时间',
+    `student_class_id`  int(11) UNSIGNED    NOT NULL AUTO_INCREMENT COMMENT '班级的id',
+    `class_name`        varchar(50)         NOT NULL COMMENT '班级名字',
+    `class_status`      tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '班级状态（0 -> 可操作。1 -> 不可操作）',
+    `class_create_time` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '班级创建时间',
     PRIMARY KEY (`student_class_id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8;
+INSERT INTO `student_class` VALUES (null, '光信161', 0, null);
+INSERT INTO `student_class` VALUES (null, '光信162', 0, null);
+INSERT INTO `student_class` VALUES (null, '光信163', 0, null);
+INSERT INTO `student_class` VALUES (null, '电科161', 0, null);
+INSERT INTO `student_class` VALUES (null, '电科162', 0, null);
+INSERT INTO `student_class` VALUES (null, '电科163', 0, null);
+INSERT INTO `student_class` VALUES (null, '材物161', 0, null);
+INSERT INTO `student_class` VALUES (null, '材物162', 0, null);
+INSERT INTO `student_class` VALUES (null, '应物161', 0, null);
+INSERT INTO `student_class` VALUES (null, '应物162', 0, null);

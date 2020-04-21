@@ -67,18 +67,19 @@
                                 v-for="item in classStatusOptions"
                                 :key="item.value"
                                 :label="item.label"
-                                :value="item.value">
+                                :value="item.value"
+                                :disabled="item.disabled">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <!-- 备注框 -->
                 <el-form-item  label="课程简单描述" prop="expCourseDescription" :label-width="formLabelWidth" clearable>
-                    <el-input type="textarea"
-                              :rows="5"
-                              placeholder="请对该课程进行简单地描述！"
-                              v-model="editExpCourseForm.expCourseDescription"
-                              maxlength="10"
-                              show-word-limit></el-input>
+                <el-input type="textarea"
+                          :rows="5"
+                          placeholder="请对该课程进行简单地描述！"
+                          v-model="editExpCourseForm.expCourseDescription"
+                          maxlength="510"
+                          show-word-limit></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -165,7 +166,7 @@
                     teacherId: "${loginInfo.userId}"
                 },
                 classStatusOptions:[
-                    {value: '0', label:'未开始'},
+                    {value: '0', label:'未开始', disabled: true},
                     {value: '1', label:'进行中'},
                     {value: '2', label:'已取消'},
                     {value: '3', label:'已结束'}

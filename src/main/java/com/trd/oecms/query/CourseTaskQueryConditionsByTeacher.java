@@ -1,6 +1,9 @@
 package com.trd.oecms.query;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * 教师查询学生任务的条件类
@@ -8,19 +11,14 @@ import lombok.Data;
  * @date 2020-04-17 18:30
  */
 @Data
-public class CourseTaskQueryConditions {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
+public class CourseTaskQueryConditionsByTeacher extends AbstractCourseTaskQueryConditions{
     /**
      * 教师ID
      */
     private Integer teacherId;
-	/**
-	 * 课程任务的状态
-	 */
-	private Byte courseTaskStatus;
-	/**
-	 * 实验课名称
-	 */
-    private String expCourseName;
 	/**
 	 * 学生姓名
 	 */

@@ -1,23 +1,14 @@
-# debug: true
 server:
   port: 80
 mybatis:
   type-aliases-package: com.trd.oecms.entities
   mapper-locations:
-    - mybatis/*.xml
+      - mybatis/*.xml
+# 打开mybatis的debug级别日志，查看sql语句
+logging:
+  level:
+    com.trd.oecms.dao: debug
 spring:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource          # DataSource类型
-    driver-class-name: com.mysql.jdbc.Driver              # MySQL驱动器
-    username: root
-    password: 123456
-    url: jdbc:mysql://localhost:3306/oecms?characterEncoding=utf8&useSSL=false
-    # 初始化大小，最小，最大
-    initial-size: 5
-    min-idle: 5
-    max-active: 20
-    # 配置获取连接等待超时的时间
-    max-wait: 60000
   http:
     multipart:
       max-file-size: 5MB
@@ -25,10 +16,37 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-# 打开mybatis的debug级别日志，查看sql语句
-logging:
-  level:
-    com.trd.oecms.dao: debug
+  # 配置druid数据源
+  datasource:
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      username: root
+      password: 123456
+      url: jdbc:mysql://localhost:3306/oecms?characterEncoding=utf8&useSSL=false
+      initialSize: 3
+      minIdle: 3
+      maxActive: 20
+      maxWait: 60000                                      # 获取连接时最大等待时间，毫秒
+      timeBetweenEvictionRunsMillis: 60000                # 配置间隔多久才进行一次检测需要关闭的空闲连接，毫秒
+      minEvictableIdleTimeMillis: 600000                  # 一个连接在池中最小生存的时间，毫秒
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 20
+      # 监控页面的servlet配置
+      stat-view-servlet:
+        enabled: true
+        reset-enable: false
+        login-username: admin
+        login-password: 123456
+        allow: 127.0.0.1
+        url-pattern: /druid/*
+      # 配置WebStatFilter，用于采集web-jdbc关联监控的数据。
+      web-stat-filter:
+        exclusions: '*.js,*.json,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,*.woff,/static/*,/druid/*'  # 排除一些静态资源
+        url-pattern: /*
 # openOffice相关配置
 jodconverter:
   local:
@@ -41,4 +59,8 @@ experimentalCourse:
     word:
       materials: ${user.dir}/expResources/word/materials/ # 实验课程讲义存放路径
       result_data: ${user.dir}/expResources/word/result_data/ # 实验课程结果数据存放路径
-
+# actuator配置，监控项目
+management:
+  security:
+    enabled: false
+  address: 127.0.0.1

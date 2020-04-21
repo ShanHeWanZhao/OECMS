@@ -22,21 +22,9 @@
             active-text-color="#00000">
         <el-menu-item index="/loginInfo/success">首页</el-menu-item>
         <#if loginInfo.userType == 0>
-            <el-submenu index="/huodong">
-                <template slot="title">上课日常活动</template>
-                    <el-menu-item index="/zoushen">走神</el-menu-item>
-                    <el-menu-item index="/listen">听歌</el-menu-item>
-                    <el-menu-item index="/playGames">玩游戏</el-menu-item>
-            </el-submenu>
-            <el-menu-item index="/homework">交作业</el-menu-item>
-            <el-menu-item index="/expCourse">上实验课</el-menu-item>
+            <el-menu-item index="/student/getMyCourseTask">查看我的实验课</el-menu-item>
         </#if>
         <#if loginInfo.userType == 1>
-<#--            <el-submenu index="/class">-->
-<#--                <template slot="title">课堂</template>-->
-<#--                <el-menu-item index="/teach">讲课</el-menu-item>-->
-<#--                <el-menu-item index="/assignHomework">布置作业</el-menu-item>-->
-<#--            </el-submenu>-->
             <el-menu-item index="/teacher/handleCourseTask">查看学生完成情况</el-menu-item>
             <el-menu-item index="/teacher/getMyExpCourse">查看实验课</el-menu-item>
         </#if>

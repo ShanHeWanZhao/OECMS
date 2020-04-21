@@ -1,4 +1,4 @@
-package com.trd.oecms.config;
+package com.trd.oecms.runner;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;

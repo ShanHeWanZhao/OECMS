@@ -6,7 +6,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -19,6 +18,8 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class CourseTask extends BaseClassName implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 课程任务的id
      */
@@ -45,6 +46,11 @@ public class CourseTask extends BaseClassName implements Serializable {
     private String expCourseResultData;
 
     /**
+     * 实验结果上传的次数（最多上传3次）
+     */
+    private Byte resultDataUploadCount;
+
+    /**
      * 该学生的该实验课的得分
      */
     private Double expCourseGrade;
@@ -64,6 +70,5 @@ public class CourseTask extends BaseClassName implements Serializable {
      */
     private String courseTaskComment;
 
-    private static final long serialVersionUID = 1L;
 
 }

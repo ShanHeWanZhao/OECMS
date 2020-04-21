@@ -16,6 +16,8 @@ import com.trd.oecms.utils.UserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,6 +91,7 @@ public class ExcelController {
 	@RequireAdmin
 	@RequestMapping("uploadExpCourse")
 	@ResponseBody
+	@Transactional(propagation = Propagation.REQUIRED) // TODO 这里有问题
 	public JsonResult uploadExpCourse(MultipartFile file){
 		try {
 			// excel转为集合对象

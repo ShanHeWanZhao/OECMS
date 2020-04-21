@@ -21,7 +21,7 @@ import static org.mybatis.generator.internal.util.StringUtility.isTrue;
  * @author Trd
  * @date 2020-04-05 14:37
  */
-public class MyMybatisCommentGenerator implements CommentGenerator {
+public class MyMybatisCommentGeneratorConfig implements CommentGenerator {
 	/** The properties. */
 	private Properties properties;
 
@@ -45,7 +45,7 @@ public class MyMybatisCommentGenerator implements CommentGenerator {
 	/**
 	 * Instantiates a new default comment generator.
 	 */
-	public MyMybatisCommentGenerator() {
+	public MyMybatisCommentGeneratorConfig() {
 		properties = new Properties();
 		suppressDate = false;
 		suppressAllComments = false;

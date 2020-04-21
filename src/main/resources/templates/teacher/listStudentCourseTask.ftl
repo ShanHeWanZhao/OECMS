@@ -34,10 +34,10 @@
                                      :max="100" clearable></el-input-number>
                 </el-form-item>
                 <!-- 备注框 -->
-                <el-form-item  label="实验评语" prop="expCourseDescription" :label-width="formLabelWidth" clearable>
+                <el-form-item  label="实验评语" prop="courseTaskComment" :label-width="formLabelWidth" clearable>
                     <el-input type="textarea" :rows="6"
                               placeholder="请输入实验评语"
-                              v-model="editCourseTaskForm.expCourseDescription"
+                              v-model="editCourseTaskForm.courseTaskComment"
                               maxlength="510"
                               show-word-limit></el-input>
                 </el-form-item>
@@ -62,7 +62,7 @@
                                v-if='scope.row.courseTaskStatus < 2'
                                disabled>待 提 交</el-button>
                     <el-button @click="showResultData(scope.row)"
-                               type="primary"
+                               type="success"
                                icon="el-icon-search"
                                v-else>查 看</el-button>
                 </template>
@@ -71,7 +71,8 @@
             <el-table-column prop="courseTaskComment" label="评语" :formatter="courseTaskCommentFormat"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" icon="el-icon-edit" v-if='scope.row.courseTaskStatus > 1'>打 分</el-button>
+                    <el-button @click="handleClick(scope.row)" type="warning" icon="el-icon-edit" v-if='scope.row.courseTaskStatus > 1 && scope.row.courseTaskStatus < 3'>打 分</el-button>
+                    <el-button type="success"  icon="el-icon-check" v-else-if='scope.row.courseTaskStatus == 3' disabled>完 成</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -97,7 +98,7 @@
                 dialogFormVisible: false,
                 formLabelWidth: '100px',
                 editCourseTaskForm:{
-                    expCourseDescription:'',
+                    courseTaskComment:'',
                     expCourseGrade: 0,
                     courseTaskId: null,
                 },
@@ -144,7 +145,6 @@
                 }
 
                 this.$http.post("/teacher/listCourseTask",  params_).then(function (response) {
-                    console.log(response);
                     this.total = response.data.count;
                     this.tableData = [];
                     for (var key in response.data.data) {
@@ -158,14 +158,14 @@
             searchCourseTask: function(){
                 this.findAll(1);
             },
-            // 查看讲义内容
-            showTeachMaterial: function(row){
-                window.open("/teacher/show?expCourseMaterial="+row.expCourseMaterial, "_blank")
+            // 学生查看实验结果
+            showResultData: function(row){
+                window.open("/student/show?expCourseResultData="+row.expCourseResultData, "_blank")
                 console.log(row);
             },
             // 单行数据编辑
             handleClick: function (row) {
-                this.editCourseTaskForm.expCourseDescription = row.expCourseDescription;
+                this.editCourseTaskForm.courseTaskComment = row.courseTaskComment;
                 this.editCourseTaskForm.expCourseGrade = row.expCourseGrade;
                 this.editCourseTaskForm.courseTaskId = row.courseTaskId;
                 this.dialogFormVisible = true;

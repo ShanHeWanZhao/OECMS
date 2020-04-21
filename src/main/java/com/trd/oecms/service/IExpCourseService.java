@@ -3,6 +3,7 @@ package com.trd.oecms.service;
 import com.trd.oecms.model.ExpCourse;
 import com.trd.oecms.query.ExpCourseQueryConditions;
 import com.trd.oecms.utils.JsonResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,6 +20,11 @@ public interface IExpCourseService {
 
     int updateByPrimaryKey(ExpCourse record);
 
+    /**
+     * 批量插入
+     * @param expCourseList
+     * @return
+     */
     int insertBatch(List<ExpCourse> expCourseList);
 
     JsonResult listExpCourse(int offset, Integer pageSize, ExpCourseQueryConditions conditions);
@@ -29,4 +35,13 @@ public interface IExpCourseService {
      * @param needAddUploadCount 是否需要增加文件上传次数（只有在文件上传时才能设置为true）
      */
     void updateSelectiveById(ExpCourse expCourse, Boolean needAddUploadCount);
+
+    /**
+     * 教师上传实验讲义
+     *
+     * @param multipartFile
+     * @param expCourseId
+     * @return
+     */
+     long uploadTeachMaterials(MultipartFile multipartFile, Integer expCourseId) throws Exception;
 }

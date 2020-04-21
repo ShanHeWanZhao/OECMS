@@ -8,6 +8,7 @@
         <result column="student_id" jdbcType="INTEGER" property="studentId"/>
         <result column="teacher_id" jdbcType="INTEGER" property="teacherId"/>
         <result column="exp_course_result_data" jdbcType="VARCHAR" property="expCourseResultData"/>
+        <result column="result_data_upload_count" jdbcType="TINYINT" property="resultDataUploadCount"/>
         <result column="exp_course_grade" jdbcType="DECIMAL" property="expCourseGrade"/>
         <result column="course_task_status" jdbcType="TINYINT" property="courseTaskStatus"/>
         <result column="course_task_create_time" jdbcType="TIMESTAMP" property="courseTaskCreateTime"/>
@@ -21,18 +22,30 @@
         <result column="user_class_id" property="userClassId"/>
         <result column="exp_course_name" property="expCourseName"/>
     </resultMap>
+    <!--教师分页查看学生的任务情况-->
+    <resultMap id="StudentPaginationResultMap" type="com.trd.oecms.query.StudentPaginationCourseTask"
+               extends="BaseResultMap">
+        <result column="exp_course_name" property="expCourseName"/>
+        <result column="exp_course_location" property="expCourseLocation"/>
+        <result column="exp_course_time" property="expCourseTime"/>
+        <result column="teacher_name" property="teacherName"/>
+        <result column="exp_course_status" property="expCourseStatus"/>
+        <result column="material_upload_count" property="materialUploadCount"/>
+        <result column="exp_course_material" property="expCourseMaterial"/>
+    </resultMap>
     <insert id="insert" useGeneratedKeys="true" keyProperty="courseTaskId" keyColumn="course_task_id">
         <!-- date： 2020-04-14 10:25 -->
         insert into `course_task` (exp_course_id, student_id,
-        teacher_id, exp_course_result_data, exp_course_grade,
+        teacher_id, exp_course_result_data, result_data_upload_count, exp_course_grade,
         course_task_status, course_task_create_time,
         course_task_comment)
-        values (#{expCourseId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER},
-        #{teacherId,jdbcType=INTEGER}, #{expCourseResultData,jdbcType=VARCHAR}, #{expCourseGrade,jdbcType=DECIMAL},
-        #{courseTaskStatus,jdbcType=TINYINT}, #{courseTaskCreateTime,jdbcType=TIMESTAMP},
-        #{courseTaskComment,jdbcType=VARCHAR})
+        values
+           (#{expCourseId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER},#{teacherId,jdbcType=INTEGER},
+            #{expCourseResultData,jdbcType=VARCHAR}, #{resultDataUploadCount,jdbcType=TINYINT},
+            #{expCourseGrade,jdbcType=DECIMAL},#{courseTaskStatus,jdbcType=TINYINT},
+            #{courseTaskCreateTime,jdbcType=TIMESTAMP},#{courseTaskComment,jdbcType=VARCHAR})
     </insert>
-    <!--批量插入柯城任务信息-->
+    <!--批量插入课程任务信息-->
     <insert id="insertBatch">
         insert into `course_task` (exp_course_id, student_id, teacher_id, course_task_status, course_task_create_time)
         <trim suffixOverrides=",">
@@ -49,25 +62,68 @@
         student_id = #{studentId,jdbcType=INTEGER},
         teacher_id = #{teacherId,jdbcType=INTEGER},
         exp_course_result_data = #{expCourseResultData,jdbcType=VARCHAR},
+        result_data_upload_count = #{resultDataUploadCount,jdbcType=TINYINT},
         exp_course_grade = #{expCourseGrade,jdbcType=DECIMAL},
         course_task_status = #{courseTaskStatus,jdbcType=TINYINT},
         course_task_create_time = #{courseTaskCreateTime,jdbcType=TIMESTAMP},
         course_task_comment = #{courseTaskComment,jdbcType=VARCHAR}
         where course_task_id = #{courseTaskId,jdbcType=INTEGER}
     </update>
+    <!--选择性的更新课程完成任务-->
+    <update id="updateSelectiveById">
+        update `course_task`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="task.expCourseId != null">
+                exp_course_id = #{task.expCourseId,jdbcType=INTEGER},
+            </if>
+            <if test="task.studentId != null">
+                student_id = #{task.studentId,jdbcType=INTEGER},
+            </if>
+            <if test="task.teacherId != null">
+                teacher_id = #{task.teacherId,jdbcType=INTEGER},
+            </if>
+            <if test="task.expCourseResultData != null and task.expCourseResultData != '' ">
+                exp_course_result_data = #{task.expCourseResultData,jdbcType=VARCHAR},
+            </if>
+            <if test="task.expCourseGrade != null">
+                exp_course_grade = #{task.expCourseGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="end">
+                course_task_status = 3,
+            </if>
+            <if test="task.courseTaskStatus != null ">
+                course_task_status = #{task.courseTaskStatus,jdbcType=TINYINT},
+            </if>
+            <if test="task.courseTaskComment != null and task.courseTaskComment != '' ">
+                course_task_comment = #{task.courseTaskComment,jdbcType=VARCHAR},
+            </if>
+            <if test="addCount">
+                result_data_upload_count = result_data_upload_count + 1
+            </if>
+        </trim>
+        where course_task_id = #{task.courseTaskId,jdbcType=INTEGER}
+    </update>
+    <update id="updateCourseTaskStatusByExpCourseStatus">
+        update `course_task` set course_task_status = #{status}
+        where exp_course_id = #{id}
+    </update>
+    <sql id="allSelect">
+        select course_task_id, exp_course_id, student_id, teacher_id,
+               exp_course_result_data,result_data_upload_count, exp_course_grade,
+               course_task_status, course_task_create_time, course_task_comment
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         <!-- date： 2020-04-14 10:25 -->
-        select course_task_id, exp_course_id, student_id, teacher_id, exp_course_result_data,
-        exp_course_grade, course_task_status, course_task_create_time, course_task_comment
+        <include refid="allSelect"/>
         from `course_task`
         where course_task_id = #{courseTaskId,jdbcType=INTEGER}
     </select>
     <select id="selectAll" resultMap="BaseResultMap">
         <!-- date： 2020-04-14 10:25 -->
-        select course_task_id, exp_course_id, student_id, teacher_id, exp_course_result_data,
-        exp_course_grade, course_task_status, course_task_create_time, course_task_comment
+        <include refid="allSelect"/>
         from `course_task`
     </select>
+<!--    教师分页查询本人管理的学生实验完成情况-->
     <sql id="teacherList">
         from  course_task co /* 课程任务表 */
         join login_info lo on co.student_id = lo.user_id /* 登录表 */
@@ -99,14 +155,70 @@
             </if>
         </where>
     </sql>
-    <select id="listCourseTask" resultMap="TeacherPaginationResultMap">
+    <select id="listCourseTaskByTeacher" resultMap="TeacherPaginationResultMap">
         select co.*, lo.user_name, lo.user_class_id, ex.exp_course_name, innercs.class_name
         <include refid="teacherList"/>
         ORDER BY co.course_task_id
         limit #{offset}, #{size}
     </select>
-    <select id="listCourseTaskCount" resultType="java.lang.Integer">
+    <select id="listCourseTaskCountByTeacher" resultType="java.lang.Integer">
         select count(co.course_task_id)
         <include refid="teacherList"/>
+    </select>
+    <!--学生分页查询本人的实验任务完成情况-->
+    <sql id="studentList">
+        FROM course_task co
+        join (
+        select inc_1.course_task_id, inc_1.exp_course_id, ine_1.exp_course_name,ine_1.exp_course_location,
+            ine_1.exp_course_time, ine_1.exp_course_status,  ine_1.material_upload_count, ine_1.exp_course_material
+        from course_task as inc_1
+        join exp_course as ine_1
+        on inc_1.exp_course_id=ine_1.exp_course_id
+        ) as exp_detail
+        on exp_detail.course_task_id = co.course_task_id
+        join (
+        select inc_2.course_task_id,inc_2.teacher_id, inl_1.user_name from course_task as inc_2
+        join login_info as inl_1
+        on inc_2.teacher_id = inl_1.user_id
+        ) as teacher_detail
+        on teacher_detail.course_task_id = co.course_task_id
+        <where>
+            co.student_id = ${cond.studentId}
+            /*实验名称*/
+            <if test="cond.expCourseName != null and cond.expCourseName != '' ">
+                and exp_detail.exp_course_name like '%${cond.expCourseName}%'
+            </if>
+            /*实验地点*/
+            <if test="cond.expCourseLocation != null and cond.expCourseLocation != '' ">
+                and exp_detail.exp_course_location like '%${cond.expCourseLocation}%'
+            </if>
+            /*任课老师名*/
+            <if test="cond.teacherName != null and cond.teacherName != '' ">
+                and teacher_detail.user_name like '%${cond.teacherName}%' -- 任课老师
+            </if>
+            /*实验时间*/
+            <if test="cond.startTime != null">
+                and exp_detail.exp_course_time &gt; #{cond.startTime}
+            </if>
+            <if test="cond.endTime != null">
+                and exp_detail.exp_course_time &lt; #{cond.endTime}
+            </if>
+            /*课程状态*/
+            <if test="cond.courseTaskStatus != null">
+                and co.course_task_status = #{cond.courseTaskStatus}
+            </if>
+        </where>
+    </sql>
+    <select id="listCourseTaskByStudent" resultMap="StudentPaginationResultMap">
+        SELECT co.*,exp_detail.exp_course_name, exp_detail.exp_course_location,exp_detail.exp_course_time,
+               teacher_detail.user_name as teacher_name, exp_detail.exp_course_status,
+               exp_detail.material_upload_count, exp_detail.exp_course_material
+        <include refid="studentList"/>
+        ORDER BY exp_detail.exp_course_time DESC
+        limit #{offset}, #{size}
+    </select>
+    <select id="listCourseTaskCountByStudent" resultType="int">
+        select count(co.course_task_id)
+        <include refid="studentList"/>
     </select>
 </mapper>
