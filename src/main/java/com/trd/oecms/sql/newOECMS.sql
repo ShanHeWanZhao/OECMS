@@ -59,10 +59,3 @@ CREATE TABLE `student_class`
 INSERT INTO `student_class` VALUES (null, '光信161', 0, null);
 INSERT INTO `student_class` VALUES (null, '光信162', 0, null);
 INSERT INTO `student_class` VALUES (null, '光信163', 0, null);
-INSERT INTO `student_class` VALUES (null, '电科161', 0, null);
-INSERT INTO `student_class` VALUES (null, '电科162', 0, null);
-INSERT INTO `student_class` VALUES (null, '电科163', 0, null);
-INSERT INTO `student_class` VALUES (null, '材物161', 0, null);
-INSERT INTO `student_class` VALUES (null, '材物162', 0, null);
-INSERT INTO `student_class` VALUES (null, '应物161', 0, null);
-INSERT INTO `student_class` VALUES (null, '应物162', 0, null);
