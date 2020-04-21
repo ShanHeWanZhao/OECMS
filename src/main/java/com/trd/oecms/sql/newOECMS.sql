@@ -10,8 +10,7 @@ CREATE TABLE `login_info`
     `user_type`      tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户的类型（学生->0，老师->1，管理员->2）',
     `user_class_id`  int(11)             NOT NULL DEFAULT '-1' COMMENT '用户对应的班级id（为-1时代表该用户无班级）',
     PRIMARY KEY (`user_id`)
-) ENGINE = InnoDB
-  CHARACTER SET = utf8;
+) ENGINE = InnoDB  CHARACTER SET = utf8;
 INSERT INTO `login_info` VALUES (null, 'admin', '1234', null, 0, '管理员', 2, -1);
 
 /* 实验课程*/
@@ -29,8 +28,7 @@ CREATE TABLE `exp_course`
     `material_upload_count`  tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '实验讲义上传的次数（最多上传3次）',
     `exp_course_create_time` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`exp_course_id`)
-) ENGINE = InnoDB
-  CHARACTER SET = utf8;
+) ENGINE = InnoDB CHARACTER SET = utf8;
 
 /* 实验课程任务的情况*/
 CREATE TABLE `course_task`
@@ -47,8 +45,7 @@ CREATE TABLE `course_task`
     `course_task_comment`      varchar(512)           NOT NULL DEFAULT '' COMMENT '该学生的实验课程评语',
     PRIMARY KEY (`course_task_id`),
     INDEX `student_index` (`student_id`) USING BTREE COMMENT '学生id索引'
-) ENGINE = InnoDB
-  CHARACTER SET = utf8;
+) ENGINE = InnoDB CHARACTER SET = utf8;
 
 /* 学生班级*/
 CREATE TABLE `student_class`
@@ -58,8 +55,7 @@ CREATE TABLE `student_class`
     `class_status`      tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '班级状态（0 -> 可操作。1 -> 不可操作）',
     `class_create_time` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '班级创建时间',
     PRIMARY KEY (`student_class_id`)
-) ENGINE = InnoDB
-  CHARACTER SET = utf8;
+) ENGINE = InnoDB CHARACTER SET = utf8;
 INSERT INTO `student_class` VALUES (null, '光信161', 0, null);
 INSERT INTO `student_class` VALUES (null, '光信162', 0, null);
 INSERT INTO `student_class` VALUES (null, '光信163', 0, null);
