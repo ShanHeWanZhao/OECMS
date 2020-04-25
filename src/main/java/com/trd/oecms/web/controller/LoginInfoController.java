@@ -52,6 +52,7 @@ public class LoginInfoController {
 		try{
 			UserTypeEnum userType = UserTypeEnum.getByNumber(type);
 			LoginInfo info = loginInfoService.getUser(accountNum, password, userType);
+			UserUtil.getSession().invalidate();
 			// 将当前用户信息保存到session中
 			UserUtil.setCurrentLoginInfo(info);
 			log.info("登录成功，登录账号：{}，登陆者：{}",info.getAccountNumber(), info.getUserName());

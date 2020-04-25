@@ -48,7 +48,7 @@
         </el-form>
         </div>
 
-        <el-table ref="multipleTable" border fit :data="tableData" highlight-current-row style="width: 100%;font-size: 12px;">
+        <el-table ref="multipleTable" border fit :data="tableData" highlight-current-row :row-class-name="tableRowClassName" style="width: 100%;font-size: 12px;">
             <el-table-column type="index" width="50" label="行号"></el-table-column>
             <el-table-column prop="courseTaskId" label="课程任务ID" v-if='show'></el-table-column>
             <el-table-column prop="materialUploadCount" label="讲义上传次数" v-if='show'></el-table-column>
@@ -60,9 +60,11 @@
                 <template slot-scope="scope">
                     <el-button @click="showTeachMaterial(scope.row)"
                                type="primary"
+                               size="small"
                                v-if='scope.row.materialUploadCount > 0'
                                icon="el-icon-search">查看</el-button>
                     <el-button type="warning"
+                               size="small"
                                v-else disabled>老师还未上传讲义</el-button>
                 </template>
             </el-table-column>
@@ -73,10 +75,12 @@
                 <template slot-scope="scope">
 <#--                    实验课已取消-->
                     <el-button type="info"
+                               size="small"
                                v-if='scope.row.expCourseStatus == 2'
                                disabled>实验已取消</el-button>
 <#--                    任务状态为 未开始，什么都不允许-->
                     <el-button type="danger"
+                               size="small"
                                v-if='scope.row.courseTaskStatus == 0 && scope.row.expCourseStatus == 0'
                                disabled>实验未开始</el-button>
 <#--                    任务状态为进行中 且 上传次数小于三次 且 实验课程状态为进行中 才允许上传-->
@@ -95,15 +99,13 @@
                                    v-if='scope.row.courseTaskStatus > 0
                                    && scope.row.courseTaskStatus < 3
                                    && scope.row.resultDataUploadCount < 3
-                                   && scope.row.expCourseStatus == 1'
-                                   icon="el-icon-upload">上传</el-button>
+                                   && scope.row.expCourseStatus == 1'>上传</el-button>
                     </el-upload>
 <#--                    有上传次数才允许查看-->
                     <el-button @click="showResultData(scope.row)"
                                type="success"
                                size="small"
                                v-if='scope.row.resultDataUploadCount > 0'
-                               icon="el-icon-search"
                                v-else>查看</el-button>
                 </template>
             </el-table-column>
@@ -312,6 +314,19 @@
                 }else {
                     this.$message.error(response.msg);
                 }
+            },
+            tableRowClassName({row, rowIndex}) {
+                switch (row.courseTaskStatus) {
+                    case 0:
+                        return 'notbegin-row';
+                    case 1:
+                        return 'process-row';
+                    case 2:
+                        return 'submit-row';
+                    case 3:
+                        return 'success-row';
+                }
+                return '';
             }
         }
     })

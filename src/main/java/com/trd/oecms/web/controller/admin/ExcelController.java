@@ -75,7 +75,7 @@ public class ExcelController {
 			int successCount = loginInfoService.insertBatch(loginInfoList);
 			return JsonResult.ok("登录信息保存成功，成功插入【"+successCount+"】条数据");
 		} catch (IllegalArgumentException e1){
-			log.error("参数给定错误，原因：{}", e1.getMessage());
+			log.error("参数给定错误，原因：{}", e1.getMessage(), e1);
 			return JsonResult.error(e1.getMessage());
 		}catch (Exception e) {
 			log.error("读取Excel失败，原因：{}",e.getMessage(),e);
@@ -119,7 +119,7 @@ public class ExcelController {
 			return JsonResult.ok("实验课程保存成功，成功插入【"+successCount+"】条实验课程数据。" +
 					"并为对应的班级学生共建立了【"+courseTaskCreateSuccessCount+"】条实验课程任务数据");
 		} catch (IllegalArgumentException e1){
-			log.error("参数给定错误，原因：{}", e1.getMessage());
+			log.error("参数给定错误，原因：{}", e1.getMessage(), e1);
 			return JsonResult.error(e1.getMessage());
 		}catch (Exception e) {
 			log.error("读取Excel失败，原因：{}",e.getMessage(),e);

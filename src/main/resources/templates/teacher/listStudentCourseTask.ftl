@@ -47,7 +47,7 @@
                 <el-button type="primary" @click="submitResult">保 存</el-button>
             </div>
         </el-dialog>
-        <el-table ref="multipleTable" border fit :data="tableData" highlight-current-row style="width: 100%;font-size: 12px;">
+        <el-table ref="multipleTable" border fit :data="tableData" :row-class-name="tableRowClassName" highlight-current-row style="width: 100%;font-size: 12px;">
             <el-table-column type="index" width="50" label="行号"></el-table-column>
             <el-table-column prop="courseTaskId" label="课程任务ID" v-if='show'></el-table-column>
             <el-table-column prop="expCourseName" label="实验名称"></el-table-column>
@@ -58,11 +58,13 @@
             <el-table-column prop="showResult" sortable label="查看结果">
                 <template slot-scope="scope">
                     <el-button type="danger"
+                               size="small"
                                v-else
                                v-if='scope.row.courseTaskStatus < 2'
                                disabled>待 提 交</el-button>
                     <el-button @click="showResultData(scope.row)"
                                type="success"
+                               size="small"
                                icon="el-icon-search"
                                v-else>查 看</el-button>
                 </template>
@@ -71,8 +73,16 @@
             <el-table-column prop="courseTaskComment" label="评语" :formatter="courseTaskCommentFormat"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="warning" icon="el-icon-edit" v-if='scope.row.courseTaskStatus > 1 && scope.row.courseTaskStatus < 3'>打 分</el-button>
-                    <el-button type="success"  icon="el-icon-check" v-else-if='scope.row.courseTaskStatus == 3' disabled>完 成</el-button>
+                    <el-button @click="handleClick(scope.row)"
+                               type="warning"
+                               icon="el-icon-edit"
+                               size="small"
+                               v-if='scope.row.courseTaskStatus > 1 && scope.row.courseTaskStatus < 3'>打 分</el-button>
+                    <el-button type="success"
+                               icon="el-icon-check"
+                               v-else-if='scope.row.courseTaskStatus == 3'
+                               size="small"
+                               disabled>完 成</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -213,6 +223,19 @@
                     return '待评价';
                 }
                 return row.courseTaskComment;
+            },
+            tableRowClassName({row, rowIndex}) {
+                switch (row.courseTaskStatus) {
+                    case 0:
+                        return 'notbegin-row';
+                    case 1:
+                        return 'process-row';
+                    case 2:
+                        return 'submit-row';
+                    case 3:
+                        return 'success-row';
+                }
+                return '';
             }
         }
     })

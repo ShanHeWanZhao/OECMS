@@ -87,7 +87,7 @@
                 <el-button type="primary" @click="updateExpCourse">保 存</el-button>
             </div>
         </el-dialog>
-        <el-table ref="multipleTable" border fit :data="tableData" highlight-current-row style="width: 100%;font-size: 12px;">
+        <el-table ref="multipleTable" border fit :data="tableData" highlight-current-row :row-class-name="tableRowClassName" style="width: 100%;font-size: 12px;">
             <el-table-column type="index" width="50" label="行号"></el-table-column>
             <el-table-column prop="expCourseId" label="实验课程ID" v-if='show'></el-table-column>
             <el-table-column prop="expCourseName" sortable label="实验名称"></el-table-column>
@@ -304,6 +304,19 @@
                 }else {
                     this.$message.error(response.msg);
                 }
+            },
+            tableRowClassName({row, rowIndex}) {
+                switch (row.expCourseStatus) {
+                    case 0:
+                        return 'notbegin-row';
+                    case 1:
+                        return 'process-row';
+                    case 2:
+                        return 'submit-row';
+                    case 3:
+                        return 'success-row';
+                }
+                return '';
             }
         }
     })

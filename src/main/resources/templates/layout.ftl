@@ -154,7 +154,16 @@
     .el-table td, .el-table th{
         text-align: center !important;
     }
-    /*.el-aside {*/
-    /*    color: #f64117;*/
-    /*}*/
+    .el-table .notbegin-row {
+        background: #fbf6fd;
+    }
+    .el-table .process-row {
+        background: #fdf6b2;
+    }
+    .el-table .submit-row {
+        background: #bdd6fd;
+    }
+    .el-table .success-row {
+        background: #c8f9d7;
+    }
 </style>

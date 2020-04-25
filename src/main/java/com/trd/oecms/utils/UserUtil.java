@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 public class UserUtil {
 
 	private UserUtil(){
-
 	}
 	/**
 	 * 登录信息在session中的属性名

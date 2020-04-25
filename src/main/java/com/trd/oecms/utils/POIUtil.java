@@ -49,28 +49,31 @@ public class POIUtil {
 				if(sheet == null){
 					continue;
 				}
-				//获得当前sheet的开始行
+				// 获得当前sheet的开始行
 				int firstRowNum  = sheet.getFirstRowNum();
-				//获得当前sheet的结束行
+				// 获得当前sheet的结束行
 				int lastRowNum = sheet.getLastRowNum();
-				//循环除了第一行的所有行
+				// 循环除了第一行的所有行
 				for(int rowNum = firstRowNum+1;rowNum <= lastRowNum;rowNum++){
 					//获得当前行
 					Row row = sheet.getRow(rowNum);
 					if(row == null){
 						continue;
 					}
-					//获得当前行的开始列
+					// 获得当前行的开始列
 					int firstCellNum = row.getFirstCellNum();
-					//获得当前行的列数
-					int lastCellNum = row.getPhysicalNumberOfCells();
-					String[] cells = new String[lastCellNum];
-					//循环当前行
-					for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
-						Cell cell = row.getCell(cellNum);
-						cells[cellNum] = poiUtil.getCellValue(cell);
+					// firstCellNum为-1时，当前行就不存在了
+					if (firstCellNum != -1){
+						//获得当前行的列数
+						int lastCellNum = row.getPhysicalNumberOfCells();
+						String[] cells = new String[lastCellNum];
+						//循环当前行
+						for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
+							Cell cell = row.getCell(cellNum);
+							cells[cellNum] = poiUtil.getCellValue(cell);
+						}
+						list.add(cells);
 					}
-					list.add(cells);
 				}
 			}
 			workbook.close();
