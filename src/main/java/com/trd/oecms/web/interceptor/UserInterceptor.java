@@ -2,8 +2,7 @@ package com.trd.oecms.web.interceptor;
 
 import com.trd.oecms.model.LoginInfo;
 import com.trd.oecms.utils.UserUtil;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author tanruidong
  * @date 2020-04-07 12:17
  */
-public class UserInterceptor implements HandlerInterceptor {
+public class UserInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         LoginInfo loginInfo = UserUtil.getCurrentLoginInfo();
@@ -23,13 +22,4 @@ public class UserInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
-    }
 }

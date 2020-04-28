@@ -1,15 +1,17 @@
 package com.trd.oecms.service.impl;
 
 import com.trd.oecms.dao.ExpCourseMapper;
+import com.trd.oecms.model.CourseTask;
 import com.trd.oecms.model.ExpCourse;
 import com.trd.oecms.query.ExpCourseQueryConditions;
+import com.trd.oecms.service.ICourseTaskService;
 import com.trd.oecms.service.IExpCourseService;
+import com.trd.oecms.service.ILoginInfoService;
 import com.trd.oecms.utils.DateUtils;
 import com.trd.oecms.utils.FileUtils;
 import com.trd.oecms.utils.JsonResult;
 import com.trd.oecms.utils.UserUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.jodconverter.DocumentConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +33,10 @@ public class ExpCourseServiceImpl implements IExpCourseService {
 
     @Autowired
     private ExpCourseMapper expCourseMapper;
+    @Autowired
+    private ICourseTaskService courseTaskService;
+    @Autowired
+    private ILoginInfoService loginInfoService;
 
     // 讲义存放路径
     @Value("${experimentalCourse.resources.word.materials}")
@@ -56,8 +63,29 @@ public class ExpCourseServiceImpl implements IExpCourseService {
     }
 
     @Override
-    public int insertBatch(List<ExpCourse> expCourseList) {
-        return expCourseMapper.insertBatch(expCourseList);
+    @Transactional(propagation = Propagation.REQUIRED)
+    public JsonResult batchInsertData(List<ExpCourse> expCourseList) {
+        int successCount = expCourseMapper.insertBatch(expCourseList);
+        // 准备CourseTask
+        List<CourseTask> courseTaskList = new ArrayList<>();
+        // 为对应班级的学生构建CourseTask
+        expCourseList.forEach(expCourse -> {
+            Integer studentClassId = expCourse.getStudentClassId();
+            List<Integer> studentIdList = loginInfoService.getStudentIdByClassId(studentClassId);
+            studentIdList.forEach(studentId -> {
+                CourseTask courseTask = new CourseTask();
+                courseTask.setExpCourseId(expCourse.getExpCourseId()).
+                        setTeacherId(expCourse.getTeacherId()).
+                        setStudentId(studentId).
+                        setCourseTaskCreateTime(new Date()).
+                        setCourseTaskStatus(new Byte("0"));
+                courseTaskList.add(courseTask);
+            });
+        });
+        // 批量插入CourseTask
+        int courseTaskCreateSuccessCount = courseTaskService.insertBatch(courseTaskList);
+        return JsonResult.ok("实验课程保存成功，成功插入【"+successCount+"】条实验课程数据。" +
+                "并为对应的班级学生共建立了【"+courseTaskCreateSuccessCount+"】条实验课程任务数据");
     }
 
     @Override

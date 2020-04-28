@@ -21,11 +21,11 @@ public interface IExpCourseService {
     int updateByPrimaryKey(ExpCourse record);
 
     /**
-     * 批量插入
+     * 批量插入实验课程数据和课程任务数据
      * @param expCourseList
      * @return
      */
-    int insertBatch(List<ExpCourse> expCourseList);
+    JsonResult batchInsertData(List<ExpCourse> expCourseList);
 
     JsonResult listExpCourse(int offset, Integer pageSize, ExpCourseQueryConditions conditions);
 

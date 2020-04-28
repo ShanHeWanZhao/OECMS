@@ -1,11 +1,9 @@
 package com.trd.oecms.web.controller.admin;
 
 import com.trd.oecms.annotation.RequireAdmin;
-import com.trd.oecms.model.CourseTask;
+import com.trd.oecms.constants.enums.UserTypeEnum;
 import com.trd.oecms.model.ExpCourse;
 import com.trd.oecms.model.LoginInfo;
-import com.trd.oecms.constants.enums.UserTypeEnum;
-import com.trd.oecms.service.ICourseTaskService;
 import com.trd.oecms.service.IExpCourseService;
 import com.trd.oecms.service.ILoginInfoService;
 import com.trd.oecms.service.IStudentClassService;
@@ -16,8 +14,6 @@ import com.trd.oecms.utils.UserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,8 +39,6 @@ public class ExcelController {
 	private ILoginInfoService loginInfoService;
 	@Autowired
 	private IExpCourseService expCourseService;
-	@Autowired
-	private ICourseTaskService courseTaskService;
 
 	@RequireAdmin
 	@RequestMapping("prepareUploadLoginInfo")
@@ -71,7 +65,6 @@ public class ExcelController {
 	public JsonResult uploadLoginInfo(MultipartFile file){
 		try {
 			List<LoginInfo> loginInfoList = toLoginInfoList(POIUtil.readExcel(file));
-			loginInfoList.forEach(System.out::println);
 			int successCount = loginInfoService.insertBatch(loginInfoList);
 			return JsonResult.ok("登录信息保存成功，成功插入【"+successCount+"】条数据");
 		} catch (IllegalArgumentException e1){
@@ -91,33 +84,11 @@ public class ExcelController {
 	@RequireAdmin
 	@RequestMapping("uploadExpCourse")
 	@ResponseBody
-	@Transactional(propagation = Propagation.REQUIRED) // TODO 这里有问题
 	public JsonResult uploadExpCourse(MultipartFile file){
 		try {
 			// excel转为集合对象
 			List<ExpCourse> expCourseList = toExpCourseList(POIUtil.readExcel(file));
-			// 批量插入ExpCourse
-			int successCount = expCourseService.insertBatch(expCourseList);
-			// 准备CourseTask
-			List<CourseTask> courseTaskList = new ArrayList<>();
-			// 为对应班级的学生构建CourseTask
-			expCourseList.forEach(expCourse -> {
-				Integer studentClassId = expCourse.getStudentClassId();
-				List<Integer> studentIdList = loginInfoService.getStudentIdByClassId(studentClassId);
-				studentIdList.forEach(studentId -> {
-					CourseTask courseTask = new CourseTask();
-					courseTask.setExpCourseId(expCourse.getExpCourseId()).
-							setTeacherId(expCourse.getTeacherId()).
-							setStudentId(studentId).
-							setCourseTaskCreateTime(new Date()).
-							setCourseTaskStatus(new Byte("0"));
-					courseTaskList.add(courseTask);
-				});
-			});
-			// 批量插入CourseTask
-			int courseTaskCreateSuccessCount = courseTaskService.insertBatch(courseTaskList);
-			return JsonResult.ok("实验课程保存成功，成功插入【"+successCount+"】条实验课程数据。" +
-					"并为对应的班级学生共建立了【"+courseTaskCreateSuccessCount+"】条实验课程任务数据");
+			return expCourseService.batchInsertData(expCourseList);
 		} catch (IllegalArgumentException e1){
 			log.error("参数给定错误，原因：{}", e1.getMessage(), e1);
 			return JsonResult.error(e1.getMessage());

@@ -11,10 +11,11 @@ import com.trd.oecms.utils.JsonResult;
 import com.trd.oecms.utils.UserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.jodconverter.DocumentConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -155,6 +156,7 @@ public class TeacherController {
     @RequireTeacher
     @PostMapping("updateExpCourse")
     @ResponseBody
+    @Transactional(propagation = Propagation.REQUIRED)
     public JsonResult updateExpCourse(ExpCourse expCourse,
                                       @Size(max = 510, message = "{expCourseDescription.max.length}") String expCourseDescription){
         try{
@@ -203,7 +205,6 @@ public class TeacherController {
             newCourseTask.setCourseTaskId(courseTask.getCourseTaskId()).
                     setCourseTaskComment(courseTask.getCourseTaskComment())
                     .setExpCourseGrade(courseTask.getExpCourseGrade());
-            System.out.println(newCourseTask);
             courseTaskService.updateSelectiveById(newCourseTask, true, false);
             return JsonResult.ok("打分成功");
         } catch(Exception e){

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @MapperScan("com.trd.oecms.dao")
 @SpringBootApplication
+@EnableTransactionManagement
 public class OECMS_APP {
     public static void main(String[] args) {
         SpringApplication.run(OECMS_APP.class, args);
