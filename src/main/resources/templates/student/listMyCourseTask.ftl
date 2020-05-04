@@ -65,7 +65,7 @@
                                icon="el-icon-search">查看</el-button>
                     <el-button type="warning"
                                size="small"
-                               v-else disabled>老师还未上传讲义</el-button>
+                               v-else disabled>未上传</el-button>
                 </template>
             </el-table-column>
             <el-table-column prop="expCourseStatus" label="实验课程状态" :formatter="expCourseStatusFormat"></el-table-column>

@@ -11,7 +11,7 @@ CREATE TABLE `login_info`
     `user_class_id`  int(11)             NOT NULL DEFAULT '-1' COMMENT '用户对应的班级id（为-1时代表该用户无班级）',
     PRIMARY KEY (`user_id`)
 ) ENGINE = InnoDB  CHARACTER SET = utf8;
-INSERT INTO `login_info` VALUES (null, 'admin', '1234', null, 0, '管理员', 2, -1);
+INSERT INTO `login_info` VALUES (null, 'admin', '1234', CURRENT_TIMESTAMP, 0, '管理员', 2, -1);
 
 /* 实验课程*/
 CREATE TABLE `exp_course`
@@ -56,6 +56,6 @@ CREATE TABLE `student_class`
     `class_create_time` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '班级创建时间',
     PRIMARY KEY (`student_class_id`)
 ) ENGINE = InnoDB CHARACTER SET = utf8;
-INSERT INTO `student_class` VALUES (null, '光信161', 0, null);
-INSERT INTO `student_class` VALUES (null, '光信162', 0, null);
-INSERT INTO `student_class` VALUES (null, '光信163', 0, null);
+INSERT INTO `student_class` VALUES (null, '光信161', 0, CURRENT_TIMESTAMP);
+INSERT INTO `student_class` VALUES (null, '光信162', 0, CURRENT_TIMESTAMP);
+INSERT INTO `student_class` VALUES (null, '光信163', 0, CURRENT_TIMESTAMP);
