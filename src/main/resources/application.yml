@@ -5,9 +5,9 @@ mybatis:
   mapper-locations:
       - mybatis/*.xml
 # 打开mybatis的debug级别日志，查看sql语句
-logging:
-  level:
-    com.trd.oecms.dao: debug
+#logging:
+#  level:
+#    com.trd.oecms.dao: debug
 spring:
   http:
     multipart:
