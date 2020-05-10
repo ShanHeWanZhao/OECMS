@@ -91,8 +91,7 @@
                     ],
                     newPassword: [
                         { required: true, message: "请输入新密码", trigger: "change" },
-                        { min: 8, message: "密码长度不小于8个字符", trigger: "change" },
-                        { pattern: "^[A-Za-z0-9]+$", message: '密码只能由数字，英文组成' },
+                        { pattern: "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$", message: '密码只能由数字和英文组成，且长度在6到20个字符之间' },
                        // { validator: checkNewPassword, trigger: "change" }
                     ]
                 },

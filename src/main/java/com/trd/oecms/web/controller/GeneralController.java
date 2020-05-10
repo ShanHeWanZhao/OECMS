@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 /**
  * 通用控制器，包括：登出，改密，登录位置定位等
@@ -62,8 +61,7 @@ public class GeneralController {
                                      Integer userId,
                                      @EqualsCurrentUser(infoType = LoginInfoTypeEnum.PASSWORD, message = "{user.oldPassword}")
                                      String oldPassword,
-                                     @Size(min = 8, max = 30, message = "{newPassword.size}")
-                                     @Pattern(regexp = "^[A-Za-z0-9]+$", message = "{newPassword.format.notMatch}")
+                                     @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$", message = "{newPassword.format.notMatch}")
                                      @EqualsCurrentUser(infoType = LoginInfoTypeEnum.PASSWORD,
                                                          requireSamePassword = false,
                                                          message = "{require.newPassword.notEquals.oldPassword}")
