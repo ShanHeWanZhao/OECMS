@@ -30,5 +30,11 @@ target/
 *.iws
 *.iml
 *.ipr
+# Eclipse
+*.classpath
+*.factorypath
+*.project
+.settings/
 
+# project resources
 expResources/
