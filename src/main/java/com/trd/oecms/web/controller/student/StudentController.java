@@ -1,7 +1,6 @@
 package com.trd.oecms.web.controller.student;
 
 import com.trd.oecms.annotation.RequireStudent;
-import com.trd.oecms.annotation.RequireTeacher;
 import com.trd.oecms.query.CourseTaskQueryConditionsByStudent;
 import com.trd.oecms.service.ICourseTaskService;
 import com.trd.oecms.utils.JsonResult;

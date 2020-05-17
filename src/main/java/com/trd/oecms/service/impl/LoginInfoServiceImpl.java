@@ -3,7 +3,6 @@ package com.trd.oecms.service.impl;
 import com.trd.oecms.constants.enums.UserTypeEnum;
 import com.trd.oecms.dao.LoginInfoMapper;
 import com.trd.oecms.exception.UserNotExistException;
-import com.trd.oecms.model.BaseClassName;
 import com.trd.oecms.model.LoginInfo;
 import com.trd.oecms.service.ILoginInfoService;
 import com.trd.oecms.utils.JsonResult;

@@ -17,6 +17,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class StudentPaginationCourseTask extends CourseTask {
+    private static final long serialVersionUID = 1L;
     private String expCourseName;
     private String expCourseLocation;
     private String expCourseMaterial;

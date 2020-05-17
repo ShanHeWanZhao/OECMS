@@ -54,13 +54,16 @@ public class AdminController {
     @RequireAdmin
     @PostMapping("/updateLoginInfo")
     @ResponseBody
-    public JsonResult updateLoginInfo(Integer userId, @NotBlank(message = "{userName.blank}") String userName, Byte userStatus) {
+    public JsonResult updateLoginInfo(Integer userId,
+                                      @NotBlank(message = "{userName.blank}") String userName,
+                                      Byte userStatus) {
         try{
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setUserId(userId).setUserStatus(userStatus).setUserName(userName.trim());
             loginInfoService.updateSelectiveById(loginInfo);
             return JsonResult.ok("更新成功");
         }catch(Exception e){
+            log.error("更新id为【{}】用户的登录信息失败，更新人：{}", userId, UserUtil.getCurrentLoginInfo().getUserName());
             return JsonResult.error(e.getMessage());
         }
     }

@@ -16,6 +16,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class TeacherPaginationCourseTask extends CourseTask {
+	private static final long serialVersionUID = 1L;
 	private String userName;
 	private Integer userClassId;
 	private String expCourseName;

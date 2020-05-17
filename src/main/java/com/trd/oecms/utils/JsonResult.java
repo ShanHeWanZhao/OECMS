@@ -3,8 +3,6 @@ package com.trd.oecms.utils;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.Collections;
-
 /**
  * controller的json返回结果
  * @author tanruidong
