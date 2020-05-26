@@ -29,15 +29,15 @@ import java.util.List;
 @RestController
 @RequestMapping("excel")
 @Slf4j
-public class ExcelController {
+public class AdminUploadExcelController {
 
 	private final IStudentClassService studentClassService;
 	private final ILoginInfoService loginInfoService;
 	private final IExpCourseService expCourseService;
 
-	public ExcelController(IStudentClassService studentClassService,
-						   ILoginInfoService loginInfoService,
-						   IExpCourseService expCourseService) {
+	public AdminUploadExcelController(IStudentClassService studentClassService,
+									  ILoginInfoService loginInfoService,
+									  IExpCourseService expCourseService) {
 		this.studentClassService = studentClassService;
 		this.loginInfoService = loginInfoService;
 		this.expCourseService = expCourseService;
