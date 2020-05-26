@@ -1,5 +1,6 @@
 package com.trd.oecms.utils;
 
+import com.trd.oecms.function.ThrowableSupplier;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * excel读写工具类
@@ -87,10 +89,15 @@ public class POIUtil {
 	 */
 	private  void checkFile(MultipartFile file) throws IOException{
 		//判断文件是否存在
-		if(null == file){
+		Optional.ofNullable(file).
+				orElseThrow(ThrowableSupplier.throwableSupplierWrapper(() -> {
 			logger.error("文件不存在！");
-			throw new FileNotFoundException("文件不存在！");
-		}
+			return new FileNotFoundException("文件不存在！");
+		}));
+//		if(null == file){
+//			logger.error("文件不存在！");
+//			throw new FileNotFoundException("文件不存在！");
+//		}
 		//获得文件名
 		String fileName = file.getOriginalFilename();
 		//判断文件是否是excel文件

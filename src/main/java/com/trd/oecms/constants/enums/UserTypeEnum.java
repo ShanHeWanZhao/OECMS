@@ -37,11 +37,11 @@ public enum UserTypeEnum {
 	public static UserTypeEnum getByNumber(Byte type){
 		switch (type){
 			case 0:
-				return UserTypeEnum.STUDENT;
+				return STUDENT;
 			case 1:
-				return UserTypeEnum.TEACHER;
+				return TEACHER;
 			case 2:
-				return UserTypeEnum.ADMIN;
+				return ADMIN;
 			default:
 				throw new IllegalArgumentException("没有【"+type+"】这样的用户类型");
 		}
@@ -65,9 +65,9 @@ public enum UserTypeEnum {
 	public static UserTypeEnum getByUserTypeName(String userTypeName) {
 		switch (userTypeName){
 			case "学生":
-				return UserTypeEnum.STUDENT;
+				return STUDENT;
 			case "教师":
-				return UserTypeEnum.TEACHER;
+				return TEACHER;
 			default:
 				throw new IllegalArgumentException("不存在【"+userTypeName+"】用户类型");
 		}

@@ -20,7 +20,7 @@
             background-color="#7A5C73"
             text-color="#fff"
             active-text-color="#00000">
-        <el-menu-item index="/loginInfo/success">首页</el-menu-item>
+        <el-menu-item index="/success">首页</el-menu-item>
         <#if loginInfo.userType == 0>
             <el-menu-item index="/student/getMyCourseTask">查看我的实验课</el-menu-item>
         </#if>

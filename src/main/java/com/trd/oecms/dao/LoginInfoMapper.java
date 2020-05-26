@@ -42,4 +42,6 @@ public interface LoginInfoMapper {
 
 
     List<Integer> getStudentIdByClassId(@Param("classId") Integer studentClassId);
+
+    int getCountByAccountNumber(@Param("name") String accountNumber);
 }

@@ -70,7 +70,7 @@
                     this.$message.error("请输入密码！");
                     return;
                 }
-                this.$http.post('/loginInfo/login', this.user)
+                this.$http.post('/login', this.user)
                     .then((response) => {
                         // success callback
                         if (response.data.code === 0){

@@ -3,7 +3,6 @@ package com.trd.oecms.config;
 import cn.org.rapid_framework.freemarker.directive.BlockDirective;
 import cn.org.rapid_framework.freemarker.directive.ExtendsDirective;
 import cn.org.rapid_framework.freemarker.directive.OverrideDirective;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,8 +19,11 @@ import javax.annotation.PostConstruct;
 @ConditionalOnWebApplication // 是web应用
 public class FreemarkerConfig {
 
-    @Autowired
-    private freemarker.template.Configuration configuration;
+    private final freemarker.template.Configuration configuration;
+
+    public FreemarkerConfig(freemarker.template.Configuration configuration) {
+        this.configuration = configuration;
+    }
 
     @PostConstruct
     public void setSharedVariable(){

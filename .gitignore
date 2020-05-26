@@ -30,7 +30,7 @@ target/
 *.iws
 *.iml
 *.ipr
-# Eclipse
+### Eclipse ###
 *.classpath
 *.factorypath
 *.project

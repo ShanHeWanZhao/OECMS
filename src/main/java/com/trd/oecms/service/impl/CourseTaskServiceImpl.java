@@ -12,7 +12,6 @@ import com.trd.oecms.utils.FileUtils;
 import com.trd.oecms.utils.JsonResult;
 import com.trd.oecms.utils.UserUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,12 +26,16 @@ import java.util.List;
 @Slf4j
 public class CourseTaskServiceImpl implements ICourseTaskService {
 
-    @Autowired
-    private CourseTaskMapper courseTaskMapper;
-
-    // 实验结果存放路径
+    private final CourseTaskMapper courseTaskMapper;
+    /**
+     * 实验结果存放路径
+     */
     @Value("${experimentalCourse.resources.word.result_data}")
     private String resultDataPath;
+
+    public CourseTaskServiceImpl(CourseTaskMapper courseTaskMapper) {
+        this.courseTaskMapper = courseTaskMapper;
+    }
 
     @Override
     public int insert(CourseTask record) {

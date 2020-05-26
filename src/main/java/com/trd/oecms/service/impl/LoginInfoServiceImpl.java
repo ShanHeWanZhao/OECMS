@@ -7,11 +7,11 @@ import com.trd.oecms.model.LoginInfo;
 import com.trd.oecms.service.ILoginInfoService;
 import com.trd.oecms.utils.JsonResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Trd
@@ -21,8 +21,11 @@ import java.util.List;
 @Slf4j
 public class LoginInfoServiceImpl implements ILoginInfoService {
 
-	@Autowired
-	private LoginInfoMapper loginInfoMapper;
+	private final LoginInfoMapper loginInfoMapper;
+
+	public LoginInfoServiceImpl(LoginInfoMapper loginInfoMapper) {
+		this.loginInfoMapper = loginInfoMapper;
+	}
 
 	@Override
 	public int save(LoginInfo record) {
@@ -85,10 +88,12 @@ public class LoginInfoServiceImpl implements ILoginInfoService {
 			List<LoginInfo> infoList = loginInfoMapper.listExcludeAdmin(offset, pageSize, loginInfo);
 			int count = loginInfoMapper.listExcludeAdminCount(offset, pageSize, loginInfo);
 			JsonResult jsonResult = JsonResult.ok();
-			if (infoList != null && infoList.size() > 0){
-				jsonResult.setData(infoList);
-				jsonResult.setCount(count);
-			}
+			Optional.ofNullable(infoList).
+					filter(value -> value.size() > 0).
+					ifPresent(value -> {
+						jsonResult.setData(value);
+						jsonResult.setCount(count);
+					});
 			return jsonResult;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -100,4 +105,9 @@ public class LoginInfoServiceImpl implements ILoginInfoService {
 	public List<Integer> getStudentIdByClassId(Integer studentClassId) {
 		return loginInfoMapper.getStudentIdByClassId(studentClassId);
 	}
+
+    @Override
+    public int getCountByAccountNumber(String accountNumber) {
+        return loginInfoMapper.getCountByAccountNumber(accountNumber);
+    }
 }

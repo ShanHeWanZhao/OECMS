@@ -1,9 +1,9 @@
 package com.trd.oecms.utils;
 
 import com.trd.oecms.model.LoginInfo;
-import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
@@ -45,13 +45,15 @@ public class UserUtil {
 	public static LoginInfo getCurrentLoginInfo(){
         return (LoginInfo) getSession().getAttribute(USER_IN_SESSION);
     }
-
+    
 	/**
-	 * 向model中保存LoginInfo数据
-	 * @param model
+	 * 向ModelAndView中保存LoginInfo数据
+	 * @param pathName 
+	 * @return
 	 */
-	public static void addLoginInfo(Model model){
-		model.addAttribute("loginInfo", getCurrentLoginInfo());
+	public static ModelAndView getMv(String pathName){
+		ModelAndView mv = new ModelAndView(pathName);
+		mv.addObject("loginInfo", getCurrentLoginInfo());
+		return mv;
 	}
-
 }

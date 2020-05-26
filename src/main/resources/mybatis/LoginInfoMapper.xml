@@ -134,4 +134,7 @@
     <select id="getStudentIdByClassId" resultType="java.lang.Integer">
         SELECT user_id FROM login_info where user_class_id = #{classId}
     </select>
+    <select id="getCountByAccountNumber" resultType="int">
+        select count(0) from login_info where account_number = #{name}
+    </select>
 </mapper>

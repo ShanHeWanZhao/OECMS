@@ -54,7 +54,6 @@ public class FileUtils {
      * @throws Exception
      */
     public static String saveFile(MultipartFile file, String savePath) throws Exception{
-        System.out.println(documentConverter);
         String fileName = FileUtils.makeNonRepeatName();
         String pdfName = fileName+".pdf";
         String newFileName = fileName+FileUtils.getFileSuffix(file.getOriginalFilename());

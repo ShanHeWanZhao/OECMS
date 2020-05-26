@@ -1,4 +1,5 @@
 /* 登录信息（学生，老师，管理员通用）*/
+DROP TABLE IF EXISTS `login_info`;
 CREATE TABLE `login_info`
 (
     `user_id`        int(11) UNSIGNED    NOT NULL AUTO_INCREMENT COMMENT '登录账号的id',
@@ -9,11 +10,13 @@ CREATE TABLE `login_info`
     `user_name`      varchar(30)         NOT NULL COMMENT '用户的真实姓名',
     `user_type`      tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户的类型（学生->0，老师->1，管理员->2）',
     `user_class_id`  int(11)             NOT NULL DEFAULT '-1' COMMENT '用户对应的班级id（为-1时代表该用户无班级）',
-    PRIMARY KEY (`user_id`)
+    PRIMARY KEY (`user_id`),
+    UNIQUE KEY `account_index` (`account_number`) USING BTREE COMMENT '账号唯一'
 ) ENGINE = InnoDB  CHARACTER SET = utf8;
 INSERT INTO `login_info` VALUES (null, 'admin', '1234', CURRENT_TIMESTAMP, 0, '管理员', 2, -1);
 
 /* 实验课程*/
+DROP TABLE IF EXISTS `exp_course`;
 CREATE TABLE `exp_course`
 (
     `exp_course_id`          int(11) UNSIGNED    NOT NULL AUTO_INCREMENT COMMENT '实验课程id',
@@ -31,6 +34,7 @@ CREATE TABLE `exp_course`
 ) ENGINE = InnoDB CHARACTER SET = utf8;
 
 /* 实验课程任务的情况*/
+DROP TABLE IF EXISTS `course_task`;
 CREATE TABLE `course_task`
 (
     `course_task_id`           int(11) UNSIGNED       NOT NULL AUTO_INCREMENT COMMENT '课程任务的id',
@@ -48,6 +52,7 @@ CREATE TABLE `course_task`
 ) ENGINE = InnoDB CHARACTER SET = utf8;
 
 /* 学生班级*/
+DROP TABLE IF EXISTS `student_class`;
 CREATE TABLE `student_class`
 (
     `student_class_id`  int(11) UNSIGNED    NOT NULL AUTO_INCREMENT COMMENT '班级的id',

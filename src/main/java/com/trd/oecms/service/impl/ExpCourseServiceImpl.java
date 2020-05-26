@@ -12,7 +12,6 @@ import com.trd.oecms.utils.FileUtils;
 import com.trd.oecms.utils.JsonResult;
 import com.trd.oecms.utils.UserUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,12 +30,17 @@ import java.util.List;
 @Slf4j
 public class ExpCourseServiceImpl implements IExpCourseService {
 
-    @Autowired
-    private ExpCourseMapper expCourseMapper;
-    @Autowired
-    private ICourseTaskService courseTaskService;
-    @Autowired
-    private ILoginInfoService loginInfoService;
+    private final ExpCourseMapper expCourseMapper;
+    private final ICourseTaskService courseTaskService;
+    private final ILoginInfoService loginInfoService;
+
+    public ExpCourseServiceImpl(ExpCourseMapper expCourseMapper,
+                                ICourseTaskService courseTaskService,
+                                ILoginInfoService loginInfoService) {
+        this.expCourseMapper = expCourseMapper;
+        this.courseTaskService = courseTaskService;
+        this.loginInfoService = loginInfoService;
+    }
 
     // 讲义存放路径
     @Value("${experimentalCourse.resources.word.materials}")

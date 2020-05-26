@@ -24,6 +24,10 @@ public class MybatisGeneratorRunner {
 			DefaultShellCallback callback = new DefaultShellCallback(true);
 			MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
 			myBatisGenerator.generate(null);
+			// 输出警告
+			for (String warning : warnings) {
+				System.out.println(warning);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

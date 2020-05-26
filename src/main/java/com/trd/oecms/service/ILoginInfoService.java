@@ -60,4 +60,11 @@ public interface ILoginInfoService {
     JsonResult listExcludeAdmin(int offset, Integer pageSize, LoginInfo loginInfo);
 
 	List<Integer> getStudentIdByClassId(Integer studentClassId);
+
+	/**
+	 * 判断账号不能重复使用
+	 * @param accountNumber
+	 * @return
+	 */
+	int getCountByAccountNumber(String accountNumber);
 }
