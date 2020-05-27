@@ -1,5 +1,6 @@
 package com.trd.oecms.service.impl;
 
+import com.trd.oecms.constants.enums.UserStatusEnum;
 import com.trd.oecms.constants.enums.UserTypeEnum;
 import com.trd.oecms.dao.LoginInfoMapper;
 import com.trd.oecms.exception.UserNotExistException;
@@ -75,10 +76,7 @@ public class LoginInfoServiceImpl implements ILoginInfoService {
     public Integer getIdByTeacherName(String teacherName) {
 		LoginInfo teacherInfo = loginInfoMapper.getIdByTeacherName(teacherName);
 		Assert.notNull(teacherInfo, "名为【"+teacherName+"】的教师不存在，请仔细检查");
-		System.out.println(teacherInfo);
-		if (teacherInfo.getUserStatus() == 1){
-			throw new IllegalArgumentException(teacherInfo.getUserName()+"，该老师状态异常，请联系管理员");
-		}
+		Assert.isTrue(teacherInfo.getUserStatus() == UserStatusEnum.ENABLE.state(), "教师【"+teacherInfo.getUserName()+"】状态异常，请联系管理员");
 		return teacherInfo.getUserId();
 	}
 

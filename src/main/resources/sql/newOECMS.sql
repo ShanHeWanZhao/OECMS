@@ -11,8 +11,8 @@ CREATE TABLE `login_info`
     `user_type`      tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户的类型（学生->0，老师->1，管理员->2）',
     `user_class_id`  int(11)             NOT NULL DEFAULT '-1' COMMENT '用户对应的班级id（为-1时代表该用户无班级）',
     PRIMARY KEY (`user_id`),
-    UNIQUE KEY `account_index` (`account_number`) USING BTREE COMMENT '账号唯一'
-) ENGINE = InnoDB  CHARACTER SET = utf8;
+    UNIQUE INDEX `uniq_account` (`account_number`) USING BTREE COMMENT '账号唯一索引'
+)  ENGINE = InnoDB CHARSET=utf8 COMMENT='登录信息表。学生，教师，管理员通用';
 INSERT INTO `login_info` VALUES (null, 'admin', '1234', CURRENT_TIMESTAMP, 0, '管理员', 2, -1);
 
 /* 实验课程*/
@@ -30,8 +30,9 @@ CREATE TABLE `exp_course`
     `exp_course_material`    varchar(255)        NOT NULL DEFAULT '' COMMENT '课程讲义存放的路径',
     `material_upload_count`  tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '实验讲义上传的次数（最多上传3次）',
     `exp_course_create_time` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    PRIMARY KEY (`exp_course_id`)
-) ENGINE = InnoDB CHARACTER SET = utf8;
+    PRIMARY KEY (`exp_course_id`),
+    INDEX `idx_teacher` (`teacher_id`) USING BTREE COMMENT '教师id索引'
+)  ENGINE = InnoDB CHARSET=utf8 COMMENT='实验课程表';
 
 /* 实验课程任务的情况*/
 DROP TABLE IF EXISTS `course_task`;
@@ -48,8 +49,9 @@ CREATE TABLE `course_task`
     `course_task_create_time`  timestamp              NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `course_task_comment`      varchar(512)           NOT NULL DEFAULT '' COMMENT '该学生的实验课程评语',
     PRIMARY KEY (`course_task_id`),
-    INDEX `student_index` (`student_id`) USING BTREE COMMENT '学生id索引'
-) ENGINE = InnoDB CHARACTER SET = utf8;
+    INDEX `idx_teacher` (`student_id`) USING BTREE COMMENT '学生id索引',
+    INDEX `idx_student` (`teacher_id`) USING BTREE COMMENT '教师id索引'
+)  ENGINE = InnoDB CHARSET=utf8 COMMENT='学生的实验任务记录表';
 
 /* 学生班级*/
 DROP TABLE IF EXISTS `student_class`;
@@ -59,8 +61,9 @@ CREATE TABLE `student_class`
     `class_name`        varchar(50)         NOT NULL COMMENT '班级名字',
     `class_status`      tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '班级状态（0 -> 可操作。1 -> 不可操作）',
     `class_create_time` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '班级创建时间',
-    PRIMARY KEY (`student_class_id`)
-) ENGINE = InnoDB CHARACTER SET = utf8;
+    PRIMARY KEY (`student_class_id`),
+    UNIQUE INDEX `uniq_class_name` (`class_name`) USING BTREE COMMENT '班级名唯一'
+) ENGINE = InnoDB CHARSET=utf8 COMMENT='学生班级表';
 INSERT INTO `student_class` VALUES (null, '光信161', 0, CURRENT_TIMESTAMP);
 INSERT INTO `student_class` VALUES (null, '光信162', 0, CURRENT_TIMESTAMP);
 INSERT INTO `student_class` VALUES (null, '光信163', 0, CURRENT_TIMESTAMP);

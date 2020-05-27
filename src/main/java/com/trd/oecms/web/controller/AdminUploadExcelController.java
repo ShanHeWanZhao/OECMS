@@ -1,6 +1,7 @@
 package com.trd.oecms.web.controller;
 
 import com.trd.oecms.annotation.RequireAdmin;
+import com.trd.oecms.constants.enums.UserStatusEnum;
 import com.trd.oecms.constants.enums.UserTypeEnum;
 import com.trd.oecms.model.ExpCourse;
 import com.trd.oecms.model.LoginInfo;
@@ -125,28 +126,31 @@ public class AdminUploadExcelController {
 	 */
 	private List<LoginInfo> toLoginInfoList(List<String[]> excelInfoList){
 		ArrayList<LoginInfo> loginInfoList = new ArrayList<>();
-		excelInfoList.forEach(excelInfo -> {
-			format(excelInfo[0], excelInfo[1], excelInfo[2]);
-			LoginInfo loginInfo = new LoginInfo(excelInfo[0], excelInfo[1], excelInfo[2], new Date(), new Byte("0"), -1);
-			int count = loginInfoService.getCountByAccountNumber(loginInfo.getAccountNumber());
-			if (count > 0){
-				throw new IllegalArgumentException("姓名为【"+loginInfo.getUserName()+"】的账号已经存在，请勿重复创建！！");
-			}
-			UserTypeEnum type = UserTypeEnum.getByUserTypeName(excelInfo[3]);
-			// 只有学生才会存在班级
+		for (String[] excelInfo: excelInfoList){
+			// 取出excel单元格信息
+			String username = excelInfo[0];
+			String accountNumber = excelInfo[1];
+			String password = excelInfo[2];
+			String userType = excelInfo[3];
+			String studentClassName = excelInfo[4];
+			// 密码和账号格式校验
+			Assert.isTrue(password.matches("^[A-Za-z0-9]+$"), "姓名为【"+username+"】的密码【"+password+"】格式不匹配，只能由数字和字母组成");
+			Assert.isTrue(accountNumber.matches("^[A-Za-z0-9]+$"), "姓名为【"+username+"】的账号【"+accountNumber+"】格式不匹配，只能由数字和字母组成");
+			// 重复账号校验
+			int count = loginInfoService.getCountByAccountNumber(accountNumber);
+			Assert.isTrue(count == 0, "姓名为【"+username+"】的账号已经存在，请勿重复创建！！" );
+			LoginInfo loginInfo = new LoginInfo(username, accountNumber, password, new Date(), UserStatusEnum.ENABLE.state(), -1);
+			// 学生设置班级
+			UserTypeEnum type = UserTypeEnum.getByUserTypeName(userType);
 			if (type == UserTypeEnum.STUDENT){
-				Integer classId = studentClassService.getIdByClassName(excelInfo[4]);
-				Assert.notNull(classId, "学生姓名为【"+loginInfo.getUserName()+"】的班级信息不正确，没有【"+excelInfo[4]+"】这个班");
+				Integer classId = studentClassService.getIdByClassName(studentClassName);
+				Assert.notNull(classId, "学生姓名为【"+loginInfo.getUserName()+"】的班级信息不正确，没有【"+studentClassName+"】这个班");
 				loginInfo.setUserClassId(classId);
 			}
 			loginInfo.setUserType((byte) type.ordinal());
 			loginInfoList.add(loginInfo);
-		});
+		}
 		return loginInfoList;
 	}
 
-	private void format(String userName, String needMatch1, String needMatch2){
-		Assert.isTrue(needMatch2.matches("^[A-Za-z0-9]+$"), "名字叫【"+userName+"】的【"+needMatch2+"】格式不匹配，只能由数字和字母组成");
-		Assert.isTrue(needMatch1.matches("^[A-Za-z0-9]+$"), "名字叫【"+userName+"】的【"+needMatch1+"】格式不匹配，只能由数字和字母组成");
-	}
 }
