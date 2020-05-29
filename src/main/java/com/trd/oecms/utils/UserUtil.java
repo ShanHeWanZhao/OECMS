@@ -11,14 +11,17 @@ import javax.servlet.http.HttpSession;
  * @author Trd
  * @date 2020-4-6 10:42
  */
-public class UserUtil {
+public abstract class UserUtil {
 
-	private UserUtil(){
-	}
 	/**
 	 * 登录信息在session中的属性名
 	 */
     private static final String USER_IN_SESSION = "loginInfo";
+
+	public static String getRequestURI(){
+		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		return requestAttributes.getRequest().getRequestURI();
+	}
 
 	/**
 	 * 获取session <p/>

@@ -19,7 +19,14 @@ public class DateUtils {
             throw new IllegalArgumentException("日期格式有误，请仔细检查！！");
         }
     }
-
+    public static String parseDateToString(Date date) {
+        try{
+            return dateFormat.format(date);
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new IllegalArgumentException("日期格式有误，请仔细检查！！");
+        }
+    }
     /**
      * 获取秒为单位的时间间隔
      * @param startMillsTime 起始时间戳
