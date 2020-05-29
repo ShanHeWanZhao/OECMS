@@ -45,7 +45,7 @@ public class TeacherController {
     }
 
     /**
-     * 讲义存放路径
+     *  讲义存放路径
      */
     @Value("${experimentalCourse.resources.word.materials}")
     private String teachMaterialsPath;
